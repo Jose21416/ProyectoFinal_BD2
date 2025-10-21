@@ -5,10 +5,9 @@ import javax.swing.JOptionPane;
 public class LConexión {
     
     private Connection cn;
-    private final String driver = "com.mysql.cj.jdbc.Driver";
-    // URL corregida con allowPublicKeyRetrieval=true
-    private final String url = "jdbc:mysql://localhost:3306/proyectofinal?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private final String usuario = "root";
+    private final String driver = "org.postgresql.Driver";
+    private final String url = "jdbc:postgresql://localhost:5432/ProyectoFinal-BD2";
+    private final String usuario = "postgres";
     private final String clave = "root";
     
     public Connection getConnection() {

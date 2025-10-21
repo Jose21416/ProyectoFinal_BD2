@@ -14,7 +14,7 @@ public class LUsuarios {
 
     public boolean validarLogin(DUsuarios usu) {
         PreparedStatement ps = null;
-        String sql = "select usuario, contraseña, estado, tipo_usuario from usuario where usuario = ? and contraseña = ? and estado = ? and tipo_usuario = ?";
+        String sql = "select usuario, contrasena, estado, tipo_usuario from usuario where usuario = ? and contraseña = ? and estado = ? and tipo_usuario = ?";
         try {
             ps = cn.prepareStatement(sql);
             ps.setString(1, usu.getUsuario());
