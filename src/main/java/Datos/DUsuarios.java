@@ -1,4 +1,3 @@
-
 package Datos;
 
 public class DUsuarios {
@@ -9,11 +8,11 @@ public class DUsuarios {
     private String correo;
     private String contrasena;
     private String telefono;
-    private TipoUsuario tipoUsuario;
-    private Estado estado;
+    private TipoUsuario tipoUsuario = TipoUsuario.ESTUDIANTE;
+    private Estado estado = Estado.ACTIVO;
 
     public enum TipoUsuario {
-        ESTUDIANTE, EGRESADO, SUPERVISOR, ADMINISTRADOR
+        ESTUDIANTE, SUPERVISOR, ADMINISTRADOR
     }
     
     public enum Estado {
@@ -23,7 +22,7 @@ public class DUsuarios {
     public DUsuarios() {
     }
 
-    public DUsuarios(int id_usuario, String usuario, String nombre, String correo, String contraseña, String telefono, TipoUsuario tipoUsuario, Estado estado) {
+    public DUsuarios(int id_usuario, String usuario, String nombre, String correo, String contrasena, String telefono, TipoUsuario tipoUsuario, Estado estado) {
         this.id_usuario = id_usuario;
         this.usuario = usuario;
         this.nombre = nombre;
@@ -31,9 +30,13 @@ public class DUsuarios {
         this.contrasena = contrasena;
         this.telefono = telefono;
         this.tipoUsuario = tipoUsuario != null ? tipoUsuario : TipoUsuario.ESTUDIANTE;
-        this.estado = estado != null ? estado: Estado.ACTIVO;
+        this.estado = estado != null ? estado : Estado.ACTIVO;
     }
     
+    public DUsuarios(String usuario, String nombre, String correo, String contrasena, String telefono, TipoUsuario tipoUsuario, Estado estado) {
+        this(0, usuario, nombre, correo, contrasena, telefono, tipoUsuario, estado);
+    }
+
     public int getId_usuario() {
         return id_usuario;
     }
@@ -66,12 +69,12 @@ public class DUsuarios {
         this.correo = correo;
     }
 
-    public String getContraseña() {
+    public String getContrasena() {
         return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contrasena = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getTelefono() {
@@ -99,5 +102,4 @@ public class DUsuarios {
     }
     
     public static String usuarioLogueado;
-    
 }

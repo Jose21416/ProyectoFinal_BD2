@@ -183,7 +183,7 @@ public class FrmInformacion extends javax.swing.JInternalFrame {
         if (resultado != null) {
             txtNombreEst.setText(resultado.getNombre());
             txtCorreoEst.setText(resultado.getCorreo());
-            txtContraseñaest.setText(resultado.getContraseña());
+            txtContraseñaest.setText(resultado.getContrasena());
             txtTelefonoest.setText(resultado.getTelefono());
         } else {
             JOptionPane.showMessageDialog(this, "Estudiante no encontrado");

@@ -198,7 +198,7 @@ public class FrmLogin2 extends javax.swing.JFrame {
         }
 
         en.setUsuario(txtUsuario.getText().toLowerCase().trim());
-        en.setContraseña(txtContraseña.getText());
+        en.setContrasena(txtContraseña.getText());
         en.setEstado(DUsuarios.Estado.ACTIVO);
         en.setTipoUsuario(DUsuarios.TipoUsuario.valueOf(cbxTipoUsuario.getSelectedItem().toString().toUpperCase()));
 

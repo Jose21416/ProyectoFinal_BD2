@@ -441,7 +441,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
             user.setTelefono(txtTelefono.getText());
             user.setCorreo(txtCorreo.getText());
             user.setUsuario(txtUsuario.getText());
-            user.setContraseña(txtContraseña.getText());
+            user.setContrasena(txtContraseña.getText());
             user.setTipoUsuario(DUsuarios.TipoUsuario.valueOf(cmbPerfil.getSelectedItem().toString().toUpperCase()));
             user.setEstado(DUsuarios.Estado.valueOf(cmbEstado.getSelectedItem().toString().toUpperCase()));
 

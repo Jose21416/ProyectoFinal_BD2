@@ -9,181 +9,147 @@ public class LUsuarios {
 
     LConexión con = new LConexión();
     Connection cn = con.getConnection();
-    DUsuarios en = new DUsuarios();
     ResultSet rs;
 
+    // ============================================
+    // VALIDAR LOGIN
+    // ============================================
     public boolean validarLogin(DUsuarios usu) {
-        PreparedStatement ps = null;
-        String sql = "select usuario, contrasena, estado, tipo_usuario from usuario where usuario = ? and contraseña = ? and estado = ? and tipo_usuario = ?";
-        try {
-            ps = cn.prepareStatement(sql);
+        String sql = "SELECT usuario, contrasena, estado, tipo_usuario "
+                   + "FROM usuario WHERE usuario = ? AND contrasena = ?";
+
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, usu.getUsuario());
-            ps.setString(2, usu.getContraseña());
-            ps.setString(3, usu.getEstado().toString().toLowerCase());
-            ps.setString(4, usu.getTipoUsuario().toString().toLowerCase());
+            ps.setString(2, usu.getContrasena());
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                en.setUsuario(rs.getString("usuario"));
-                en.setContraseña(rs.getString("contrasena"));
-                en.setEstado(DUsuarios.Estado.valueOf(rs.getString("estado").toUpperCase()));
-                en.setTipoUsuario(DUsuarios.TipoUsuario.valueOf(rs.getString("tipo_usuario").toUpperCase()));
+                String estado = rs.getString("estado");
+                String tipo = rs.getString("tipo_usuario");
+
+                if (!estado.equalsIgnoreCase("activo")) {
+                    JOptionPane.showMessageDialog(null, "El usuario está inactivo");
+                    return false;
+                }
+
+                if (!tipo.equalsIgnoreCase(usu.getTipoUsuario().name().toLowerCase())) {
+                    JOptionPane.showMessageDialog(null, "Tipo de usuario incorrecto");
+                    return false;
+                }
 
                 DUsuarios.usuarioLogueado = rs.getString("usuario");
                 return true;
             } else {
-                JOptionPane.showMessageDialog(null, "No se encontro el usuario (Esta inactivo o el tipo de usuario no es el correcto)", "Aviso del sistema",
-                        JOptionPane.ERROR_MESSAGE);
-                return false;
+                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
             }
 
-        } catch (Exception e) {
-            System.out.println("Error en: " + e.getMessage());
-            JOptionPane.showMessageDialog(null, "Error en: " + e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error en validar login: " + e.getMessage());
         }
-        return false;
 
+        return false;
     }
 
-    public boolean crearUsuario(String usuario, String nombre, String correo, String contraseña, String telefono, String tipoUsuario) {
+    // ============================================
+    // CREAR USUARIO
+    // ============================================
+    public boolean crearUsuario(String usuario, String nombre, String correo, String contrasena, String telefono, String tipoUsuario) {
         String sql = "{CALL CrearUsuario(?, ?, ?, ?, ?, ?)}";
 
         try (CallableStatement cs = cn.prepareCall(sql)) {
             cs.setString(1, usuario);
             cs.setString(2, nombre);
             cs.setString(3, correo);
-            cs.setString(4, contraseña);
+            cs.setString(4, contrasena);
             cs.setString(5, telefono);
             cs.setString(6, tipoUsuario.toLowerCase());
 
-            boolean tieneResultado = cs.execute();
-
-            if (tieneResultado) {
-                ResultSet rs = cs.getResultSet();
-                if (rs.next()) {
-                    int id = rs.getInt("id_usuario");
-                    String mensaje = rs.getString("mensaje");
-                    return true;
-                }
-            }
+            cs.execute();
+            JOptionPane.showMessageDialog(null, "Usuario creado correctamente");
+            return true;
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al ejecutar el procedimiento: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al crear usuario: " + e.getMessage());
         }
 
         return false;
     }
 
+    // ============================================
+    // MOSTRAR USUARIOS
+    // ============================================
     public DefaultTableModel mostrarUsuarios(DUsuarios dts) {
-        DefaultTableModel modelo;
         String[] titulos = {"ID", "Nombre", "Telefono", "Correo", "Usuario", "Contraseña", "Tipo de Usuario", "Estado"};
-        String[] registro = new String[8];
-
-        modelo = new DefaultTableModel(null, titulos);
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
 
         String sqlSinFiltro = "SELECT * FROM ObtenerTodosLosUsuarios()";
         String sqlConFiltro = "SELECT id_usuario, nombre, telefono, correo, usuario, contrasena, tipo_usuario, estado "
-                + "FROM usuario WHERE usuario LIKE ? ORDER BY nombre";
+                            + "FROM usuario WHERE usuario LIKE ? ORDER BY nombre";
 
         try {
             PreparedStatement pst;
 
             if (dts.getUsuario() == null || dts.getUsuario().trim().isEmpty()) {
-                // Usar procedimiento
-                PreparedStatement cs = cn.prepareStatement(sqlSinFiltro);
-                ResultSet rs = cs.executeQuery();
-
-                while (rs.next()) {
-                    registro[0] = String.valueOf(rs.getInt("id_usuario"));
-                    registro[1] = rs.getString("nombre");
-                    registro[2] = rs.getString("telefono");
-                    registro[3] = rs.getString("correo");
-                    registro[4] = rs.getString("usuario");
-                    registro[5] = rs.getString("contrasena");
-                    registro[6] = rs.getString("tipo_usuario");
-                    registro[7] = rs.getString("estado");
-
-                    modelo.addRow(registro);
-                }
-
+                pst = cn.prepareStatement(sqlSinFiltro);
             } else {
-                // Usar consulta con filtro
                 pst = cn.prepareStatement(sqlConFiltro);
                 pst.setString(1, "%" + dts.getUsuario() + "%");
-                ResultSet rs = pst.executeQuery();
-
-                while (rs.next()) {
-                    registro[0] = String.valueOf(rs.getInt("id_usuario"));
-                    registro[1] = rs.getString("nombre");
-                    registro[2] = rs.getString("telefono");
-                    registro[3] = rs.getString("correo");
-                    registro[4] = rs.getString("usuario");
-                    registro[5] = rs.getString("contrasena");
-                    registro[6] = rs.getString("tipo_usuario");
-                    registro[7] = rs.getString("estado");
-
-                    modelo.addRow(registro);
-                }
             }
 
-            return modelo;
+            ResultSet rs = pst.executeQuery();
 
-        } catch (Exception e) {
+            while (rs.next()) {
+                String[] registro = new String[8];
+                registro[0] = String.valueOf(rs.getInt("id_usuario"));
+                registro[1] = rs.getString("nombre");
+                registro[2] = rs.getString("telefono");
+                registro[3] = rs.getString("correo");
+                registro[4] = rs.getString("usuario");
+                registro[5] = rs.getString("contrasena");
+                registro[6] = rs.getString("tipo_usuario");
+                registro[7] = rs.getString("estado");
+                modelo.addRow(registro);
+            }
+
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al mostrar usuarios: " + e.getMessage());
-            return modelo;
         }
+
+        return modelo;
     }
 
-    public String editarUsuarios(DUsuarios misUsuarios) {
-
+    // ============================================
+    // EDITAR USUARIO
+    // ============================================
+    public String editarUsuarios(DUsuarios u) {
         String msg = null;
-
-        System.out.println("ID a editar: " + misUsuarios.getId_usuario());
-        System.out.println("Usuario: " + misUsuarios.getUsuario());
-        System.out.println("Correo: " + misUsuarios.getCorreo());
-
-        try {
-
-            CallableStatement cst = cn.prepareCall("{ call ActualizarUsuario(?,?,?,?,?,?,?)}");
-            cst.setInt(1, misUsuarios.getId_usuario());
-            cst.setString(2, misUsuarios.getNombre());
-            cst.setString(3, misUsuarios.getTelefono());
-            cst.setString(4, misUsuarios.getCorreo());
-            cst.setString(5, misUsuarios.getUsuario());
-            cst.setString(6, misUsuarios.getContraseña());
-            cst.setString(7, misUsuarios.getTipoUsuario().name());
-            cst.setString(8, misUsuarios.getEstado().name());
+        try (CallableStatement cst = cn.prepareCall("{ call ActualizarUsuario(?,?,?,?,?,?,?,?) }")) {
+            cst.setInt(1, u.getId_usuario());
+            cst.setString(2, u.getUsuario());
+            cst.setString(3, u.getNombre());
+            cst.setString(4, u.getCorreo());
+            cst.setString(5, u.getTelefono());
+            cst.setString(6, u.getTipoUsuario().name().toLowerCase());
+            cst.setString(7, u.getEstado().name().toLowerCase());
+            cst.setString(8, u.getContrasena());
 
             cst.executeUpdate();
-
-            msg = "Se actualizó de forma correcta";
-        } catch (Exception ex) {
-
-            ex.printStackTrace();
-
+            msg = "Usuario actualizado correctamente";
+        } catch (SQLException ex) {
+            msg = "Error al actualizar: " + ex.getMessage();
         }
-
         return msg;
-
     }
 
-    public String eliminarUsuarios(DUsuarios misUsuarios) {
-
-        String msg = null;
-
-        try {
-
-            CallableStatement cst = cn.prepareCall("{ call EliminarUsuario(?)}");
-            cst.setInt(1, misUsuarios.getId_usuario());
+    // ============================================
+    // ELIMINAR USUARIO
+    // ============================================
+    public String eliminarUsuarios(DUsuarios u) {
+        try (CallableStatement cst = cn.prepareCall("{ call EliminarUsuario(?) }")) {
+            cst.setInt(1, u.getId_usuario());
             cst.executeUpdate();
-            msg = "Se eliminó de forma correcta";
-        } catch (Exception ex) {
-
-            ex.printStackTrace();
-
+            return "Usuario eliminado correctamente";
+        } catch (SQLException ex) {
+            return "Error al eliminar usuario: " + ex.getMessage();
         }
-
-        return msg;
-
     }
-
 }

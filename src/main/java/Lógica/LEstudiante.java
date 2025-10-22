@@ -21,7 +21,7 @@ public class LEstudiante {
             if(rs.next()){
                 us.setNombre(rs.getString("nombre"));
                 us.setCorreo(rs.getString("correo"));
-                us.setContraseña(rs.getString("contraseña"));
+                us.setContrasena(rs.getString("contraseña"));
                 us.setTelefono(rs.getString("telefono")); 
                 return us;
             }else{
