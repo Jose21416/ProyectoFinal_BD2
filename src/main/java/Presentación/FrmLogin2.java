@@ -73,7 +73,7 @@ public class FrmLogin2 extends javax.swing.JFrame {
             }
         });
 
-        cbxTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elije un usuario", "Administrador", "Supervisor", "Egresado", "Estudiante" }));
+        cbxTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elije un usuario", "Administrador", "Supervisor", "Estudiante" }));
         cbxTipoUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxTipoUsuarioActionPerformed(evt);
@@ -212,10 +212,6 @@ public class FrmLogin2 extends javax.swing.JFrame {
             } else if (tipoUsuario.equals("Supervisor")) {
                 JOptionPane.showMessageDialog(null, "Bienvenido, Supervisor.");
                 new FrmSupervisor().setVisible(true);
-                this.dispose();
-            } else if (tipoUsuario.equals("Egresado")) {
-                JOptionPane.showMessageDialog(null, "Bienvenido, Egresado.");
-                new FrmEgresado().setVisible(true);
                 this.dispose();
             } else if (tipoUsuario.equals("Estudiante")) {
                 JOptionPane.showMessageDialog(null, "Bienvenido, Estudiante.");

@@ -151,7 +151,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
             }
         });
 
-        cmbPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un perfil", "estudiante", "egresado", "supervisor", "administrador" }));
+        cmbPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un perfil", "estudiante", "supervisor", "administrador" }));
         cmbPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbPerfilActionPerformed(evt);
