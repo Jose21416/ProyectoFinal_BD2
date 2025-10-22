@@ -25,7 +25,7 @@ public class LUsuarios {
 
             if (rs.next()) {
                 en.setUsuario(rs.getString("usuario"));
-                en.setContraseña(rs.getString("contraseña"));
+                en.setContraseña(rs.getString("contrasena"));
                 en.setEstado(DUsuarios.Estado.valueOf(rs.getString("estado").toUpperCase()));
                 en.setTipoUsuario(DUsuarios.TipoUsuario.valueOf(rs.getString("tipo_usuario").toUpperCase()));
 
@@ -80,8 +80,8 @@ public class LUsuarios {
 
         modelo = new DefaultTableModel(null, titulos);
 
-        String sqlSinFiltro = "{CALL MostrarListaUsuarios()}";
-        String sqlConFiltro = "SELECT id_usuario, nombre, telefono, correo, usuario, contraseña, tipo_usuario, estado "
+        String sqlSinFiltro = "SELECT * FROM ObtenerTodosLosUsuarios()";
+        String sqlConFiltro = "SELECT id_usuario, nombre, telefono, correo, usuario, contrasena, tipo_usuario, estado "
                 + "FROM usuario WHERE usuario LIKE ? ORDER BY nombre";
 
         try {
@@ -89,7 +89,7 @@ public class LUsuarios {
 
             if (dts.getUsuario() == null || dts.getUsuario().trim().isEmpty()) {
                 // Usar procedimiento
-                CallableStatement cs = cn.prepareCall(sqlSinFiltro);
+                PreparedStatement cs = cn.prepareStatement(sqlSinFiltro);
                 ResultSet rs = cs.executeQuery();
 
                 while (rs.next()) {
@@ -98,7 +98,7 @@ public class LUsuarios {
                     registro[2] = rs.getString("telefono");
                     registro[3] = rs.getString("correo");
                     registro[4] = rs.getString("usuario");
-                    registro[5] = rs.getString("contraseña");
+                    registro[5] = rs.getString("contrasena");
                     registro[6] = rs.getString("tipo_usuario");
                     registro[7] = rs.getString("estado");
 
@@ -117,7 +117,7 @@ public class LUsuarios {
                     registro[2] = rs.getString("telefono");
                     registro[3] = rs.getString("correo");
                     registro[4] = rs.getString("usuario");
-                    registro[5] = rs.getString("contraseña");
+                    registro[5] = rs.getString("contrasena");
                     registro[6] = rs.getString("tipo_usuario");
                     registro[7] = rs.getString("estado");
 
@@ -143,7 +143,7 @@ public class LUsuarios {
 
         try {
 
-            CallableStatement cst = cn.prepareCall("{ call ActualizarUsuario(?,?,?,?,?,?,?,?)}");
+            CallableStatement cst = cn.prepareCall("{ call ActualizarUsuario(?,?,?,?,?,?,?)}");
             cst.setInt(1, misUsuarios.getId_usuario());
             cst.setString(2, misUsuarios.getNombre());
             cst.setString(3, misUsuarios.getTelefono());

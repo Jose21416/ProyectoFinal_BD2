@@ -7,7 +7,7 @@ public class DUsuarios {
     private String usuario;
     private String nombre;
     private String correo;
-    private String contraseña;
+    private String contrasena;
     private String telefono;
     private TipoUsuario tipoUsuario;
     private Estado estado;
@@ -28,7 +28,7 @@ public class DUsuarios {
         this.usuario = usuario;
         this.nombre = nombre;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.telefono = telefono;
         this.tipoUsuario = tipoUsuario != null ? tipoUsuario : TipoUsuario.ESTUDIANTE;
         this.estado = estado != null ? estado: Estado.ACTIVO;
@@ -67,11 +67,11 @@ public class DUsuarios {
     }
 
     public String getContraseña() {
-        return contraseña;
+        return contrasena;
     }
 
     public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+        this.contrasena = contraseña;
     }
 
     public String getTelefono() {
