@@ -253,12 +253,12 @@ public class FrmSupervisor extends javax.swing.JFrame {
 
         try {
             // Cargar el driver de MySQL
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.postgresql.Driver");
 
             // Establecer la conexión a la base de datos
             conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/proyectofinal?useSSL=false&serverTimezone=UTC",
-                "root",
+                "jdbc:postgresql://localhost:5432/ProyectoFinal-BD2",
+                "postgres",
                 "root" // contraseña si tienes una
             );
 

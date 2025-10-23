@@ -38,7 +38,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
         txtTelefono.setText("");
         txtCorreo.setText("");
         txtUsuario.setText("");
-        txtContraseña.setText("");
+        txtContrasena.setText("");
         txtConfirmarClave.setText("");
         cmbPerfil.setSelectedIndex(0);
 
@@ -50,7 +50,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
         txtTelefono.setEnabled(!b);
         txtCorreo.setEnabled(!b);
         txtUsuario.setEnabled(!b);
-        txtContraseña.setEnabled(!b);
+        txtContrasena.setEnabled(!b);
         txtConfirmarClave.setEnabled(!b);
         cmbPerfil.setEnabled(!b);
         cmbEstado.setEnabled(!b);
@@ -100,7 +100,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
         txtId = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtUsuario = new javax.swing.JTextField();
-        txtContraseña = new javax.swing.JPasswordField();
+        txtContrasena = new javax.swing.JPasswordField();
         txtConfirmarClave = new javax.swing.JPasswordField();
         cmbPerfil = new javax.swing.JComboBox<>();
         btnNuevo = new javax.swing.JButton();
@@ -231,7 +231,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
                             .addComponent(txtNombre)
                             .addComponent(txtCorreo)
                             .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtContraseña)
+                            .addComponent(txtContrasena)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cmbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbPerfil, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -267,7 +267,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel4)
-                    .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel5)
@@ -409,27 +409,27 @@ public class FrmUsuarios extends javax.swing.JFrame {
         String telefono = txtTelefono.getText().trim();
         String correo = txtCorreo.getText().trim();
         String usuario = txtUsuario.getText().trim();
-        String contraseña = new String(txtContraseña.getPassword()).trim();
+        String contrasena = new String(txtContrasena.getPassword()).trim();
         String confirmarClave = new String(txtConfirmarClave.getPassword()).trim();
         String tipoUsuario = cmbPerfil.getSelectedItem().toString();
 
         // Validaciones básicas
         if (nombre.isEmpty() || telefono.isEmpty() || correo.isEmpty()
-                || usuario.isEmpty() || contraseña.isEmpty() || confirmarClave.isEmpty()
+                || usuario.isEmpty() || contrasena.isEmpty() || confirmarClave.isEmpty()
                 || cmbPerfil.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.");
             return;
         }
 
         // Verificar contraseña
-        if (!contraseña.equals(confirmarClave)) {
+        if (!contrasena.equals(confirmarClave)) {
             JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.");
             return;
         }
 
         if (txtId.getText().isEmpty()) {
 
-            if (l.crearUsuario(usuario, nombre, correo, contraseña, telefono, tipoUsuario)) {
+            if (l.crearUsuario(usuario, nombre, correo, contrasena, telefono, tipoUsuario)) {
                 JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente");
                 mostrarBuscar("");
             }
@@ -441,7 +441,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
             user.setTelefono(txtTelefono.getText());
             user.setCorreo(txtCorreo.getText());
             user.setUsuario(txtUsuario.getText());
-            user.setContrasena(txtContraseña.getText());
+            user.setContrasena(txtContrasena.getText());
             user.setTipoUsuario(DUsuarios.TipoUsuario.valueOf(cmbPerfil.getSelectedItem().toString().toUpperCase()));
             user.setEstado(DUsuarios.Estado.valueOf(cmbEstado.getSelectedItem().toString().toUpperCase()));
 
@@ -483,7 +483,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
         txtTelefono.setText(tblUsuarios.getValueAt(fila, 2).toString());
         txtCorreo.setText(tblUsuarios.getValueAt(fila, 3).toString());
         txtUsuario.setText(tblUsuarios.getValueAt(fila, 4).toString());
-        txtContraseña.setText(tblUsuarios.getValueAt(fila, 5).toString());
+        txtContrasena.setText(tblUsuarios.getValueAt(fila, 5).toString());
         txtConfirmarClave.setText(tblUsuarios.getValueAt(fila, 5).toString());
         cmbPerfil.setSelectedItem(tblUsuarios.getValueAt(fila, 6).toString());
         cmbEstado.setSelectedItem(tblUsuarios.getValueAt(fila, 7).toString());
@@ -569,7 +569,7 @@ public class FrmUsuarios extends javax.swing.JFrame {
     private javax.swing.JTable tblUsuarios;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JPasswordField txtConfirmarClave;
-    private javax.swing.JPasswordField txtContraseña;
+    private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNombre;

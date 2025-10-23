@@ -12,7 +12,7 @@ public class LEstudiante {
     
     public DUsuarios mostrarInformacionEstudiante(DUsuarios est){
         PreparedStatement ps = null;
-        String sql = "SELECT nombre, correo, contraseña, telefono FROM usuario WHERE usuario = ? AND tipo_usuario = 'estudiante'";
+        String sql = "SELECT nombre, correo, contrasena, telefono FROM usuario WHERE usuario = ? AND tipo_usuario = 'estudiante'";
         try {
             ps = cn.prepareStatement(sql);
             ps.setString(1, est.getUsuario());
@@ -21,7 +21,7 @@ public class LEstudiante {
             if(rs.next()){
                 us.setNombre(rs.getString("nombre"));
                 us.setCorreo(rs.getString("correo"));
-                us.setContrasena(rs.getString("contraseña"));
+                us.setContrasena(rs.getString("contrasena"));
                 us.setTelefono(rs.getString("telefono")); 
                 return us;
             }else{

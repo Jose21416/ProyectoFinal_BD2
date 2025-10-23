@@ -24,7 +24,7 @@ public class LSupervisor {
 
         tabla = new DefaultTableModel(null, encabezado);
 
-        String sql = "SELECT id_usuario, nombre, telefono, correo, usuario, contraseña, tipo_usuario, estado "
+        String sql = "SELECT id_usuario, nombre, telefono, correo, usuario, contrasena, tipo_usuario, estado "
                 + "FROM usuario WHERE usuario LIKE ? ORDER BY nombre";
         try {
             PreparedStatement ps = cn.prepareStatement(sql);
@@ -37,7 +37,7 @@ public class LSupervisor {
                 registro[2] = rs.getString("telefono");
                 registro[3] = rs.getString("correo");
                 registro[4] = rs.getString("usuario");
-                registro[5] = rs.getString("contraseña");
+                registro[5] = rs.getString("contrasena");
                 registro[6] = rs.getString("tipo_usuario");
                 registro[7] = rs.getString("estado");
 

@@ -5,9 +5,9 @@ import java.sql.Date;
 
 
 public class DCodigo_verificacion {
-    private int idCodigo;
-    private int idUsuario;
-    private int codigo;
+    private int id_codigo;
+    private int id_usuario;
+    private String codigo;
     private Metodo metodo;
     private Date fecha_creacion; 
     private Date fecha_expiracion; 
@@ -17,9 +17,9 @@ public class DCodigo_verificacion {
     public DCodigo_verificacion() {
     }
 
-    public DCodigo_verificacion(int idCodigo, int idUsuario, int codigo, Metodo metodo, Date fecha_creacion, Date fecha_expiracion, int usado, int intentos) {
-        this.idCodigo = idCodigo;
-        this.idUsuario = idUsuario;
+    public DCodigo_verificacion(int id_codigo, int id_usuario, String codigo, Metodo metodo, Date fecha_creacion, Date fecha_expiracion, int usado, int intentos) {
+        this.id_codigo = id_codigo;
+        this.id_usuario = id_usuario;
         this.codigo = codigo;
         this.metodo = metodo;
         this.fecha_creacion = fecha_creacion;
@@ -28,27 +28,27 @@ public class DCodigo_verificacion {
         this.intentos = intentos;
     }
     
-    public int getIdCodigo() {
-        return idCodigo;
+    public int getId_codigo() {
+        return id_codigo;
     }
 
-    public void setIdCodigo(int idCodigo) {
-        this.idCodigo = idCodigo;
+    public void setId_codigo(int id_codigo) {
+        this.id_codigo = id_codigo;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public int getId_usuario() {
+        return id_usuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdUsuario(int id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

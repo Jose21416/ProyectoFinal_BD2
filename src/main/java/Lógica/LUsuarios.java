@@ -15,8 +15,12 @@ public class LUsuarios {
     // VALIDAR LOGIN
     // ============================================
     public boolean validarLogin(DUsuarios usu) {
-        String sql = "SELECT usuario, contrasena, estado, tipo_usuario "
-                   + "FROM usuario WHERE usuario = ? AND contrasena = ?";
+        String sql = """
+            SELECT usuario, contrasena, estado, tipo_usuario
+            FROM usuario
+            WHERE TRIM(LOWER(usuario)) = TRIM(LOWER(?))
+            AND TRIM(contrasena) = TRIM(?)
+        """;
 
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, usu.getUsuario());
@@ -54,7 +58,7 @@ public class LUsuarios {
     // CREAR USUARIO
     // ============================================
     public boolean crearUsuario(String usuario, String nombre, String correo, String contrasena, String telefono, String tipoUsuario) {
-        String sql = "{CALL CrearUsuario(?, ?, ?, ?, ?, ?)}";
+        String sql = "CALL CrearUsuario(?, ?, ?, ?, ?, ?)";
 
         try (CallableStatement cs = cn.prepareCall(sql)) {
             cs.setString(1, usuario);
@@ -82,8 +86,12 @@ public class LUsuarios {
         DefaultTableModel modelo = new DefaultTableModel(null, titulos);
 
         String sqlSinFiltro = "SELECT * FROM ObtenerTodosLosUsuarios()";
-        String sqlConFiltro = "SELECT id_usuario, nombre, telefono, correo, usuario, contrasena, tipo_usuario, estado "
-                            + "FROM usuario WHERE usuario LIKE ? ORDER BY nombre";
+        String sqlConFiltro = """
+            SELECT id_usuario, nombre, telefono, correo, usuario, contrasena, tipo_usuario, estado
+            FROM usuario
+            WHERE TRIM(LOWER(nombre)) ILIKE TRIM(LOWER(?))
+            ORDER BY nombre
+        """;
 
         try {
             PreparedStatement pst;
@@ -122,7 +130,7 @@ public class LUsuarios {
     // ============================================
     public String editarUsuarios(DUsuarios u) {
         String msg = null;
-        try (CallableStatement cst = cn.prepareCall("{ call ActualizarUsuario(?,?,?,?,?,?,?,?) }")) {
+        try (CallableStatement cst = cn.prepareCall("call ActualizarUsuario(?,?,?,?,?,?,?,?)")) {
             cst.setInt(1, u.getId_usuario());
             cst.setString(2, u.getUsuario());
             cst.setString(3, u.getNombre());
@@ -144,7 +152,7 @@ public class LUsuarios {
     // ELIMINAR USUARIO
     // ============================================
     public String eliminarUsuarios(DUsuarios u) {
-        try (CallableStatement cst = cn.prepareCall("{ call EliminarUsuario(?) }")) {
+        try (CallableStatement cst = cn.prepareCall("call EliminarUsuario(?)")) {
             cst.setInt(1, u.getId_usuario());
             cst.executeUpdate();
             return "Usuario eliminado correctamente";

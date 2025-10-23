@@ -40,11 +40,12 @@ public class LRecuperación {
         return null;
     }
     
-    public boolean guardarCodigoVerificacion(int idUsuario, String codigo) {
-        String sql = "INSERT INTO codigo_verificacion (id_usuario, codigo, metodo_envio, fecha_expiracion) VALUES (?, ?, 'correo', DATE_ADD(NOW(), INTERVAL 1 MINUTE))";
+    public boolean guardarCodigoVerificacion(int id_usuario, String codigo) {
+        String sql = "INSERT INTO codigo_verificacion (id_usuario, codigo, metodo_envio, fecha_expiracion) " +
+                 "VALUES (?, ?, 'correo', NOW() + INTERVAL '1 minute')";
         
         try (PreparedStatement ps = cn.prepareStatement(sql)) { 
-            ps.setInt(1, idUsuario);
+            ps.setInt(1, id_usuario);
             ps.setString(2, codigo);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -53,19 +54,19 @@ public class LRecuperación {
         }
     }
     
-    public boolean verificarYUsarCodigo(int idUsuario, String codigo) {
+    public boolean verificarYUsarCodigo(int id_usuario, String codigo) {
         String selectSql = "SELECT id_codigo FROM codigo_verificacion WHERE id_usuario = ? AND codigo = ? AND usado = 0 AND fecha_expiracion > NOW()";
         
         try (PreparedStatement psSelect = cn.prepareStatement(selectSql)) {
-            psSelect.setInt(1, idUsuario);
+            psSelect.setInt(1, id_usuario);
             psSelect.setString(2, codigo);
             ResultSet rs = psSelect.executeQuery();
 
             if (rs.next()) {
-                int idCodigo = rs.getInt("id_codigo");
+                int id_codigo = rs.getInt("id_codigo");
                 String updateSql = "UPDATE codigo_verificacion SET usado = 1 WHERE id_codigo = ?";
                 try (PreparedStatement psUpdate = cn.prepareStatement(updateSql)) {
-                    psUpdate.setInt(1, idCodigo);
+                    psUpdate.setInt(1, id_codigo);
                     psUpdate.executeUpdate();
                 }
                 return true;
@@ -76,12 +77,12 @@ public class LRecuperación {
         return false;
     }
     
-    public boolean actualizarContraseña(int idUsuario, String nuevaContraseña) {
-        String sql = "UPDATE usuario SET contraseña = ? WHERE id_usuario = ?";
+    public boolean actualizarContraseña(int id_usuario, String nuevaContraseña) {
+        String sql = "UPDATE usuario SET contrasena = ? WHERE id_usuario = ?";
         
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, nuevaContraseña);
-            ps.setInt(2, idUsuario);
+            ps.setInt(2, id_usuario);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al actualizar la contraseña: " + e.getMessage());
