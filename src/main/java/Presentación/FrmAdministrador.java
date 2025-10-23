@@ -32,6 +32,7 @@ public class FrmAdministrador extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         usuarios = new javax.swing.JMenuItem();
+        Cursos = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -47,6 +48,14 @@ public class FrmAdministrador extends javax.swing.JFrame {
             }
         });
         jMenu2.add(usuarios);
+
+        Cursos.setText("Cursos");
+        Cursos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CursosActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Cursos);
 
         jMenuBar1.add(jMenu2);
 
@@ -93,6 +102,13 @@ public class FrmAdministrador extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void CursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CursosActionPerformed
+        // TODO add your handling code here:
+    FrmCursos form = new FrmCursos();
+    form.setVisible(true);
+
+    }//GEN-LAST:event_CursosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -129,6 +145,7 @@ public class FrmAdministrador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Cursos;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
