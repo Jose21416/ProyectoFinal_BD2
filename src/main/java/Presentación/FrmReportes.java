@@ -1,9 +1,9 @@
 package Presentación;
 
-public class FrmCursos extends javax.swing.JInternalFrame {
+public class FrmReportes extends javax.swing.JInternalFrame {
 
 
-    public FrmCursos() {
+    public FrmReportes() {
         initComponents();
     }
 
@@ -11,6 +11,8 @@ public class FrmCursos extends javax.swing.JInternalFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        setClosable(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
