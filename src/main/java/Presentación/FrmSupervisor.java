@@ -6,6 +6,7 @@ package Presentación;
 
 import Datos.DUsuarios;
 import Lógica.LSupervisor;
+import java.awt.Dimension;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,6 +33,12 @@ public class FrmSupervisor extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         this.setSize(1200, 800); 
+        
+        Dimension tamDesktop = jDesktopPane1.getSize();
+        int ancho = tamDesktop.width;
+        int alto = tamDesktop.height;
+
+        System.out.println("Ancho: " + ancho + "  Alto: " + alto);
     }
 
     /**
@@ -67,7 +74,7 @@ public class FrmSupervisor extends javax.swing.JFrame {
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 736, Short.MAX_VALUE)
+            .addGap(0, 739, Short.MAX_VALUE)
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

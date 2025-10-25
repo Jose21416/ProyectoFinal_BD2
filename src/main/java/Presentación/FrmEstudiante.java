@@ -4,6 +4,7 @@
  */
 package Presentación;
 
+import java.awt.Dimension;
 import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 
@@ -19,7 +20,13 @@ public class FrmEstudiante extends javax.swing.JFrame {
     public FrmEstudiante() {
         initComponents();
         setLocationRelativeTo(null);
-        
+
+        Dimension tamDesktop = jDesktopPane1.getSize();
+        int ancho = tamDesktop.width;
+        int alto = tamDesktop.height;
+
+        System.out.println("Ancho: " + ancho + "  Alto: " + alto);
+
     }
 
     /**
@@ -258,7 +265,7 @@ public class FrmEstudiante extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         for (JInternalFrame frame : jDesktopPane1.getAllFrames()) {
-            frame.dispose(); 
+            frame.dispose();
         }
         FrmActualizar ac = new FrmActualizar();
         jDesktopPane1.add(ac);
@@ -278,13 +285,13 @@ public class FrmEstudiante extends javax.swing.JFrame {
 
     private void btnNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotasActionPerformed
         for (JInternalFrame frame : jDesktopPane1.getAllFrames()) {
-            frame.dispose(); 
+            frame.dispose();
         }
         FrmNotas notas = new FrmNotas();
         jDesktopPane1.add(notas);
         notas.show();
         try {
-            notas.setMaximum(true); 
+            notas.setMaximum(true);
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
@@ -292,22 +299,22 @@ public class FrmEstudiante extends javax.swing.JFrame {
 
     private void btnCursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCursosActionPerformed
         for (JInternalFrame frame : jDesktopPane1.getAllFrames()) {
-            frame.dispose(); 
+            frame.dispose();
         }
         FrmCursos cursos = new FrmCursos();
         jDesktopPane1.add(cursos);
         cursos.show();
         try {
-            cursos.setMaximum(true); 
+            cursos.setMaximum(true);
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
-        
+
     }//GEN-LAST:event_btnCursosActionPerformed
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
         for (JInternalFrame frame : jDesktopPane1.getAllFrames()) {
-            frame.dispose(); 
+            frame.dispose();
         }
         FrmReportes reportes = new FrmReportes();
         jDesktopPane1.add(reportes);
