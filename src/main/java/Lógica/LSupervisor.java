@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class LSupervisor {
     
-    LConexión con = new LConexión();
+    LConexion con = new LConexion();
     Connection cn = con.getConnection();
     DUsuarios en = new DUsuarios();
     ResultSet rs;

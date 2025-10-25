@@ -400,6 +400,8 @@ public class FrmUsuarios extends javax.swing.JFrame {
         // TODO add your handling code here:
         habilitar(false);
         cmbPerfil.setEnabled(false);
+        txtContrasena.setEnabled(false);
+        txtConfirmarClave.setEnabled(false);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed

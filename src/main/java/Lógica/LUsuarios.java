@@ -7,13 +7,10 @@ import javax.swing.table.DefaultTableModel;
 
 public class LUsuarios {
 
-    LConexión con = new LConexión();
+    LConexion con = new LConexion();
     Connection cn = con.getConnection();
     ResultSet rs;
 
-    // ============================================
-    // VALIDAR LOGIN
-    // ============================================
     public boolean validarLogin(DUsuarios usu) {
         String sql = """
             SELECT usuario, contrasena, estado, tipo_usuario
@@ -54,9 +51,6 @@ public class LUsuarios {
         return false;
     }
 
-    // ============================================
-    // CREAR USUARIO
-    // ============================================
     public boolean crearUsuario(String usuario, String nombre, String correo, String contrasena, String telefono, String tipoUsuario) {
         String sql = "CALL CrearUsuario(?, ?, ?, ?, ?, ?)";
 
@@ -78,9 +72,6 @@ public class LUsuarios {
         return false;
     }
 
-    // ============================================
-    // MOSTRAR USUARIOS
-    // ============================================
     public DefaultTableModel mostrarUsuarios(DUsuarios dts) {
         String[] titulos = {"ID", "Nombre", "Telefono", "Correo", "Usuario", "Contraseña", "Tipo de Usuario", "Estado"};
         DefaultTableModel modelo = new DefaultTableModel(null, titulos);
@@ -125,9 +116,6 @@ public class LUsuarios {
         return modelo;
     }
 
-    // ============================================
-    // EDITAR USUARIO
-    // ============================================
     public String editarUsuarios(DUsuarios u) {
         String msg = null;
         try (CallableStatement cst = cn.prepareCall("call ActualizarUsuario(?,?,?,?,?,?,?,?)")) {
@@ -148,9 +136,6 @@ public class LUsuarios {
         return msg;
     }
 
-    // ============================================
-    // ELIMINAR USUARIO
-    // ============================================
     public String eliminarUsuarios(DUsuarios u) {
         try (CallableStatement cst = cn.prepareCall("call EliminarUsuario(?)")) {
             cst.setInt(1, u.getId_usuario());
@@ -160,4 +145,20 @@ public class LUsuarios {
             return "Error al eliminar usuario: " + ex.getMessage();
         }
     }
+
+    public int obtenerIdUsuario(String usuario) {
+        int id = -1;
+        String sql = "SELECT id_usuario FROM usuario WHERE LOWER(usuario) = LOWER(?)";
+        try (PreparedStatement pst = cn.prepareStatement(sql)) {
+            pst.setString(1, usuario);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("id_usuario");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener ID del usuario: " + e.getMessage());
+        }
+        return id;
+    }
+
 }

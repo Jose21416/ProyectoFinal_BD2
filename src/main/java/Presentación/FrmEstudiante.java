@@ -14,11 +14,16 @@ import javax.swing.SwingUtilities;
  */
 public class FrmEstudiante extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmUsuarios
-     */
-    public FrmEstudiante() {
+    private int idUsuario;
+    
+    public FrmEstudiante(){
+        
+        
+    }
+    
+    public FrmEstudiante(int idUsuario) {
         initComponents();
+        this.idUsuario = idUsuario;
         setLocationRelativeTo(null);
 
         Dimension tamDesktop = jDesktopPane1.getSize();
@@ -287,7 +292,7 @@ public class FrmEstudiante extends javax.swing.JFrame {
         for (JInternalFrame frame : jDesktopPane1.getAllFrames()) {
             frame.dispose();
         }
-        FrmNotas notas = new FrmNotas();
+        FrmNotas notas = new FrmNotas(idUsuario);
         jDesktopPane1.add(notas);
         notas.show();
         try {

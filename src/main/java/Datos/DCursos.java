@@ -1,6 +1,6 @@
 package Datos;
 
-import Lógica.LConexión;
+import Lógica.LConexion;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -33,7 +33,7 @@ public class DCursos {
         String[] titulos = {"ID", "Curso", "Descripción"};
         String[] registro = new String[3];
         modelo = new DefaultTableModel(null, titulos);
-        LConexión conexion = new LConexión();
+        LConexion conexion = new LConexion();
 
         String sql = """
             SELECT c.id_curso, c.nombre, c.descripcion
@@ -63,7 +63,7 @@ public class DCursos {
 
     // CRUD básico
     public boolean insertar() {
-        LConexión conexion = new LConexión();
+        LConexion conexion = new LConexion();
         String sql = "INSERT INTO curso (nombre, descripcion) VALUES (?, ?)";
         try (Connection cn = conexion.getConnection();
              PreparedStatement pst = cn.prepareStatement(sql)) {
@@ -79,7 +79,7 @@ public class DCursos {
     }
 
     public boolean editar() {
-        LConexión conexion = new LConexión();
+        LConexion conexion = new LConexion();
         String sql = "UPDATE curso SET nombre=?, descripcion=? WHERE id_curso=?";
         try (Connection cn = conexion.getConnection();
              PreparedStatement pst = cn.prepareStatement(sql)) {
@@ -96,7 +96,7 @@ public class DCursos {
     }
 
     public boolean eliminar() {
-        LConexión conexion = new LConexión();
+        LConexion conexion = new LConexion();
         String sql = "DELETE FROM curso WHERE id_curso=?";
         try (Connection cn = conexion.getConnection();
              PreparedStatement pst = cn.prepareStatement(sql)) {

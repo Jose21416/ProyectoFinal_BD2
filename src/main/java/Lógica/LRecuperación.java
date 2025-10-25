@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class LRecuperación {
-    LConexión ocon = new LConexión();
+    LConexion ocon = new LConexion();
     Connection cn = ocon.getConnection();
     DUsuarios us = new DUsuarios();
     ResultSet rs;

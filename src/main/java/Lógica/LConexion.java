@@ -2,7 +2,7 @@ package Lógica;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-public class LConexión {
+public class LConexion {
     
     private Connection cn;
     private final String driver = "org.postgresql.Driver";
@@ -39,7 +39,7 @@ public class LConexión {
     
     // Verificar la conexión
     public static void main(String[] args) {
-        LConexión ocon = new LConexión();
+        LConexion ocon = new LConexion();
         Connection conexion = ocon.getConnection();
         
         if (conexion != null) {

@@ -1,4 +1,3 @@
-
 package Presentación;
 
 import Datos.DUsuarios;
@@ -13,20 +12,19 @@ public class FrmLogin2 extends javax.swing.JFrame {
 
     DUsuarios en = new DUsuarios();
     LUsuarios l = new LUsuarios();
-    
+
     public FrmLogin2() {
         initComponents();
         setLocationRelativeTo(null);
-        
+
         lblRecuperar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        
+
         ImageIcon imLogin = new ImageIcon(getClass().getClassLoader().getResource("Imagenes/Usuarios.png"));
         Icon icLogin = new ImageIcon(imLogin.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH));
         lblLogin.setIcon(icLogin);
-        
+
         setTitle("Inicio de sesión");
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -215,7 +213,11 @@ public class FrmLogin2 extends javax.swing.JFrame {
                 this.dispose();
             } else if (tipoUsuario.equals("Estudiante")) {
                 JOptionPane.showMessageDialog(null, "Bienvenido, Estudiante.");
-                new FrmEstudiante().setVisible(true);
+                LUsuarios l = new LUsuarios();
+                int idUsuario = l.obtenerIdUsuario(usuario);
+
+                FrmEstudiante frm = new FrmEstudiante(idUsuario);             
+                frm.setVisible(true);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Credenciales incorrectas o usuario inactivo");
@@ -226,14 +228,14 @@ public class FrmLogin2 extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
         int opcion = JOptionPane.showOptionDialog(
-            null,
-            "¿Estás seguro de que deseas salir?",
-            "Confirmar salida",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            new Object[]{"Sí", "No"},
-            "No"
+                null,
+                "¿Estás seguro de que deseas salir?",
+                "Confirmar salida",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{"Sí", "No"},
+                "No"
         );
 
         if (opcion == JOptionPane.YES_OPTION) {
@@ -258,7 +260,6 @@ public class FrmLogin2 extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_lblRecuperarMouseClicked
 
-    
     /**
      * @param args the command line arguments
      */
