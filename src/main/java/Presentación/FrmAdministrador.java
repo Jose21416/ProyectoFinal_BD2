@@ -103,10 +103,8 @@ public class FrmAdministrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void CursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CursosActionPerformed
-        // TODO add your handling code here:
-    FrmCursos form = new FrmCursos();
-    form.setVisible(true);
-
+     Presentación.FrmCursos frm = new Presentación.FrmCursos();
+    frm.setVisible(true);     
     }//GEN-LAST:event_CursosActionPerformed
 
     /**

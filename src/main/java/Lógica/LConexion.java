@@ -3,6 +3,10 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class LConexion {
+
+    static Connection getConexion() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     private Connection cn;
     private final String driver = "org.postgresql.Driver";

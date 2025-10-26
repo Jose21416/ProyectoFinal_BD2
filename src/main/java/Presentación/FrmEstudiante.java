@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Presentación;
 
 import java.awt.Dimension;
@@ -18,7 +15,8 @@ public class FrmEstudiante extends javax.swing.JFrame {
     
     public FrmEstudiante(){
         
-        
+        initComponents();
+    setLocationRelativeTo(null);
     }
     
     public FrmEstudiante(int idUsuario) {
@@ -303,18 +301,18 @@ public class FrmEstudiante extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNotasActionPerformed
 
     private void btnCursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCursosActionPerformed
-        for (JInternalFrame frame : jDesktopPane1.getAllFrames()) {
-            frame.dispose();
-        }
-        FrmCursos cursos = new FrmCursos();
-        jDesktopPane1.add(cursos);
-        cursos.show();
-        try {
-            cursos.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-            e.printStackTrace();
-        }
+           for (JInternalFrame frame : jDesktopPane1.getAllFrames()) {
+        frame.dispose();
+    }
 
+    FrmCursosEstudiante frm = new FrmCursosEstudiante(idUsuario);
+    jDesktopPane1.add(frm);
+    frm.show();
+    try {
+        frm.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_btnCursosActionPerformed
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
@@ -363,6 +361,7 @@ public class FrmEstudiante extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new FrmEstudiante().setVisible(true);
             }
