@@ -1,18 +1,15 @@
-package Lógica;
+    package Lógica;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class LConexion {
-
-    static Connection getConexion() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     
-    private Connection cn;
     private final String driver = "org.postgresql.Driver";
     private final String url = "jdbc:postgresql://localhost:5432/ProyectoFinal-BD2";
     private final String usuario = "postgres";
     private final String clave = "root";
+    
+    private Connection cn;
     
     public Connection getConnection() {
         try {
