@@ -328,6 +328,12 @@ public class FrmUsuarios extends javax.swing.JFrame {
             }
         });
 
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -432,7 +438,6 @@ public class FrmUsuarios extends javax.swing.JFrame {
         if (txtId.getText().isEmpty()) {
 
             if (l.crearUsuario(usuario, nombre, correo, contrasena, telefono, tipoUsuario)) {
-                JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente");
                 mostrarBuscar("");
             }
         } else {
@@ -511,6 +516,10 @@ public class FrmUsuarios extends javax.swing.JFrame {
         habilitar(true);
         mostrarBuscar("");
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     /**
      * @param args the command line arguments

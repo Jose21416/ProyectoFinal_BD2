@@ -23,7 +23,7 @@ public class FrmRecuperarContraseña2 extends javax.swing.JFrame {
     private FrmRecuperarContraseña2() {
         initComponents();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -177,10 +177,10 @@ public class FrmRecuperarContraseña2 extends javax.swing.JFrame {
 
         boolean esValido = dao.verificarYUsarCodigo(this.idUsuario, codigoIngresado);
         FrmRecuperarContraseña3 r = new FrmRecuperarContraseña3(this.idUsuario);
-        r.setVisible(true);
-        this.dispose();
         if (esValido) {
             JOptionPane.showMessageDialog(this, "Codigo verificado correctamente.");
+            r.setVisible(true);
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "El código es incorrecto, ha expirado o ya fue utilizado.", "Error de Verificación", JOptionPane.ERROR_MESSAGE);
         }
