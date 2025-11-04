@@ -1,34 +1,33 @@
 package Presentación;
 
-import Datos.DDetalle_evaluacion;
+import Datos.DNota_evaluacion;
 import Lógica.LDetalle_evaluacion;
 import javax.swing.table.DefaultTableModel;
 
 public class FrmDetalle_evaluacion extends javax.swing.JFrame {
 
-    private int idNota;
-    
+    private int idUsuario;
+    private int idAsignatura;
+
     public FrmDetalle_evaluacion() {
-        initComponents();    
+        initComponents();
     }
-    
-    public FrmDetalle_evaluacion(int idNota, String asignatura, String periodo) {
+
+    public FrmDetalle_evaluacion(int idUsuario, int idAsignatura, String asignatura, String periodo) {
         initComponents();
         setLocationRelativeTo(null);
-        this.idNota = idNota;
-        
+        this.idUsuario = idUsuario;
+        this.idAsignatura = idAsignatura;
+
         setTitle("Detalle de evaluación - " + asignatura + " (" + periodo + ")");
         mostrarDetallesEvaluacion();
     }
 
     private void mostrarDetallesEvaluacion() {
         LDetalle_evaluacion func = new LDetalle_evaluacion();
-        DefaultTableModel modelo = func.mostrarPorNota(idNota);
+        DefaultTableModel modelo = func.mostrarPorAsignatura(idUsuario, idAsignatura);
         tblDetalleEvaluacion.setModel(modelo);
     }
-    
-
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

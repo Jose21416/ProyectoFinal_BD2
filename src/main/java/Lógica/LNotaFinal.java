@@ -1,16 +1,16 @@
 package Lógica;
 
-import Datos.DNota;
+import Datos.DNotaFinal;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class LNota {
+public class LNotaFinal {
 
     LConexion con = new LConexion();
     Connection cn = con.getConnection();
 
-    public DefaultTableModel mostrarNotasPorEstudiante(DNota dts) {
+    public DefaultTableModel mostrarNotasPorEstudiante(DNotaFinal dts) {
         String[] titulos = {"ID Nota", "Asignatura", "Periodo", "Nota Final"};
         DefaultTableModel modelo = new DefaultTableModel(null, titulos);
 
@@ -18,16 +18,16 @@ public class LNota {
         String sql;
         if (dts.getPeriodo() == null || dts.getPeriodo().trim().isEmpty()) {
             sql = """
-            SELECT n.id_nota, a.nombre AS asignatura, n.periodo, n.nota
-            FROM nota n
+            SELECT n.id_notaFinal, a.nombre AS asignatura, n.periodo, n.notaFinal
+            FROM notaFinal n
             INNER JOIN asignatura a ON n.id_asignatura = a.id_asignatura
             WHERE n.id_usuario = ?
             ORDER BY n.periodo DESC;
         """;
         } else {
             sql = """
-            SELECT n.id_nota, a.nombre AS asignatura, n.periodo, n.nota
-            FROM nota n
+            SELECT n.id_notaFinal, a.nombre AS asignatura, n.periodo, n.notaFinal
+            FROM notaFinal n
             INNER JOIN asignatura a ON n.id_asignatura = a.id_asignatura
             WHERE n.id_usuario = ? AND n.periodo = ?
             ORDER BY a.nombre;
@@ -45,10 +45,10 @@ public class LNota {
 
             while (rs.next()) {
                 String[] registro = new String[4];
-                registro[0] = String.valueOf(rs.getInt("id_nota"));
+                registro[0] = String.valueOf(rs.getInt("id_notaFinal"));
                 registro[1] = rs.getString("asignatura");
                 registro[2] = rs.getString("periodo");
-                registro[3] = String.valueOf(rs.getDouble("nota"));
+                registro[3] = String.valueOf(rs.getDouble("notaFinal"));
                 modelo.addRow(registro);
             }
 
@@ -62,9 +62,11 @@ public class LNota {
     public double calcularPromedioPorPeriodo(int idUsuario, String periodo) {
         double promedio = 0;
         String sql = """
-        SELECT ROUND(AVG(nota), 2) AS promedio
-        FROM nota
-        WHERE id_usuario = ? AND periodo = ?;
+        SELECT 
+            ROUND(SUM(n.notaFinal * a.creditos) / SUM(a.creditos), 2) AS promedio
+        FROM notaFinal n
+        INNER JOIN asignatura a ON n.id_asignatura = a.id_asignatura
+        WHERE n.id_usuario = ? AND n.periodo = ?;
     """;
 
         try (PreparedStatement pst = cn.prepareStatement(sql)) {

@@ -1,22 +1,22 @@
 package Datos;
 
-public class DNota {
+public class DNotaFinal {
 
     private int id_nota;
     private int id_usuario;
     private int id_asignatura;
     private String periodo;
-    private double nota;
+    private double notaFinal;
 
-    public DNota() {
+    public DNotaFinal() {
     }
 
-    public DNota(int id_nota, int id_usuario, int id_asignatura, String periodo, double nota) {
+    public DNotaFinal(int id_nota, int id_usuario, int id_asignatura, String periodo, double notaFinal) {
         this.id_nota = id_nota;
         this.id_usuario = id_usuario;
         this.id_asignatura = id_asignatura;
         this.periodo = periodo;
-        this.nota = nota;
+        this.notaFinal = notaFinal;
     }
 
     public int getId_nota() {
@@ -51,14 +51,14 @@ public class DNota {
         this.periodo = periodo;
     }
 
-    public double getNota() {
-        return nota;
+    public double getNotaFinal() {
+        return notaFinal;
     }
 
-    public void setNota(double nota) {
-        this.nota = nota;
+    public void setNotaFinal(double notaFinal) {
+        this.notaFinal = notaFinal;
     }
+
     
-    
-    
+     
 }

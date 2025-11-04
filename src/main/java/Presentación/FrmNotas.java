@@ -1,7 +1,7 @@
 package Presentación;
 
-import Lógica.LNota;
-import Datos.DNota;
+import Lógica.LNotaFinal;
+import Datos.DNotaFinal;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -26,8 +26,8 @@ public class FrmNotas extends javax.swing.JInternalFrame {
     }
 
     private void mostrarNotas() {
-        LNota func = new LNota();
-        DNota dts = new DNota();
+        LNotaFinal func = new LNotaFinal();
+        DNotaFinal dts = new DNotaFinal();
         dts.setId_usuario(idUsuario);
 
         String periodo = (String) cbPeriodo.getSelectedItem();
@@ -53,10 +53,10 @@ public class FrmNotas extends javax.swing.JInternalFrame {
     private void cargarPeriodos() {
         cbPeriodo.removeAllItems();
         cbPeriodo.addItem("Elija el periodo académico...");
-        cbPeriodo.addItem("2024-1");
-        cbPeriodo.addItem("2024-2");
-        cbPeriodo.addItem("2025-1");
-        cbPeriodo.addItem("2025-2");
+        cbPeriodo.addItem("2024-I");
+        cbPeriodo.addItem("2024-II");
+        cbPeriodo.addItem("2025-I");
+        cbPeriodo.addItem("2025-II");
         cbPeriodo.setSelectedIndex(0); // Selecciona "Elija el periodo académico..."
     }
 
@@ -159,14 +159,29 @@ public class FrmNotas extends javax.swing.JInternalFrame {
         mostrarNotas();
     }//GEN-LAST:event_cbPeriodoActionPerformed
 
+    private int obtenerIdAsignaturaPorNombre(String nombreAsignatura) {
+        int id = -1;
+        String sql = "SELECT id_asignatura FROM asignatura WHERE nombre = ?";
+        try (java.sql.PreparedStatement pst = new Lógica.LConexion().getConnection().prepareStatement(sql)) {
+            pst.setString(1, nombreAsignatura);
+            java.sql.ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("id_asignatura");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener id de asignatura: " + e.getMessage());
+        }
+        return id;
+    }
+
     private void tblNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNotasMouseClicked
         int fila = tblNotas.getSelectedRow();
         if (fila >= 0) {
-            int idNota = Integer.parseInt(tblNotas.getValueAt(fila, 0).toString());
+            int idAsignatura = obtenerIdAsignaturaPorNombre(tblNotas.getValueAt(fila, 1).toString());
             String asignatura = tblNotas.getValueAt(fila, 1).toString();
             String periodo = tblNotas.getValueAt(fila, 2).toString();
 
-            FrmDetalle_evaluacion frm = new FrmDetalle_evaluacion(idNota, asignatura, periodo);
+            FrmDetalle_evaluacion frm = new FrmDetalle_evaluacion(idUsuario, idAsignatura, asignatura, periodo);
             frm.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Seleccione una fila válida.");
