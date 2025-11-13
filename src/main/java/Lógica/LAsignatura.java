@@ -3,6 +3,7 @@ package Lógica;
 import Datos.DAsignatura;
 import java.sql.Connection;
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,47 +14,60 @@ import java.util.logging.Logger;
 
 public class LAsignatura {
     
-    // Instancia de la clase de conexión para reutilizarla
     private final LConexion conexion = new LConexion();
-    private String sql = "";
-    
-    // Logger para registrar errores en el servidor/consola
     private static final Logger logger = Logger.getLogger(LAsignatura.class.getName());
     
+    // Títulos de la tabla (usados en mostrarTodas y buscarAsignaturas)
+    private final String[] titulos = {"ID Asig.", "ID Curso", "Curso", "Asignatura", "Créditos"};
+    
+    // =========================================================================
+    // 1. CREAR (CREATE)
+    // =========================================================================
+    /**
+     * Inserta una nueva asignatura usando el stored procedure CrearAsignatura.
+     * @param datos
+     * @return 
+     */
     // 1. CREAR (CREATE)
     public boolean insertar(DAsignatura datos) {
-        // Llama al Procedure: CALL CrearAsignatura(p_id_curso, p_nombre, p_creditos)
-        sql = "{call CrearAsignatura(?, ?, ?)}"; 
-        
-        // Usamos try-with-resources para asegurar el cierre de Connection y CallableStatement
+    // Usamos PreparedStatement en lugar de CallableStatement
+        String sql = "INSERT INTO asignatura (id_curso, nombre, creditos) VALUES (?, ?, ?)";
+    
+    // Usamos PreparedStatement y no CallableStatement
         try (Connection cn = conexion.getConnection(); 
-             CallableStatement cs = cn.prepareCall(sql)) {
-            
-            cs.setInt(1, datos.getId_curso());
-            cs.setString(2, datos.getNombre());
-            cs.setInt(3, datos.getCreditos());
-            
-            cs.execute();
+            PreparedStatement pst = cn.prepareStatement(sql)) { 
+        
+            pst.setInt(1, datos.getId_curso());
+            pst.setString(2, datos.getNombre());
+            pst.setInt(3, datos.getCreditos());
+        
+            pst.executeUpdate(); // Usamos executeUpdate para INSERT
             return true;
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al insertar asignatura", e);
-            JOptionPane.showMessageDialog(null, "Error al insertar asignatura: " + e.getMessage());
+            logger.log(Level.SEVERE, "Error al insertar asignatura (PreparedStatement)", e);
+            JOptionPane.showMessageDialog(null, "Error al insertar asignatura: " + e.getMessage(), "Error de BD", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
+    // =========================================================================
     // 2. LEER (READ) - Muestra todas las asignaturas
+    // =========================================================================
+    /**
+     * Muestra todas las asignaturas en un DefaultTableModel.
+     * * NOTA IMPORTANTE: Esta función requiere que la función SQL 
+     * 'ObtenerTodasLasAsignaturas()' devuelva las columnas exactas: 
+     * id_asignatura, id_curso, nombre_curso, nombre_asignatura, creditos.
+     * @return 
+     */
     public DefaultTableModel mostrarTodas() {
         DefaultTableModel modelo;
         
-        // Títulos: 0: ID Asig., 1: ID Curso, 2: Nombre Curso, 3: Nombre Asignatura, 4: Créditos
         String[] titulos = {"ID Asig.", "ID Curso", "Curso", "Asignatura", "Créditos"};
         modelo = new DefaultTableModel(null, titulos);
         
-        // Uso de SELECT * FROM Funcion() para PostgreSQL (lo más robusto)
-        sql = "SELECT * FROM ObtenerTodasLasAsignaturas()"; 
+        String sql = "SELECT * FROM ObtenerTodasLasAsignaturas()"; 
 
-        // Usamos try-with-resources con Connection, Statement y ResultSet
         try (Connection cn = conexion.getConnection();
              Statement st = cn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -61,7 +75,7 @@ public class LAsignatura {
             while (rs.next()) {
                 String[] registro = new String[5];
                 
-                // Los nombres de columna deben coincidir exactamente con los ALIAS de la función SQL
+                // Los nombres deben coincidir con los aliases de la función SQL
                 registro[0] = rs.getString("id_asignatura");
                 registro[1] = rs.getString("id_curso");
                 registro[2] = rs.getString("nombre_curso");
@@ -71,55 +85,121 @@ public class LAsignatura {
             }
             
         } catch (SQLException e) {
-            // Se registra el error en el log
-            logger.log(Level.SEVERE, "Error al mostrar asignaturas (usando SELECT * FROM): ", e);
+            // Este catch es CRÍTICO para el error de transacción abortada
+            logger.log(Level.SEVERE, "Error al cargar asignaturas desde la función SQL.", e);
             
-            // Se muestra el error detallado al usuario
-            JOptionPane.showMessageDialog(null, "Error de base de datos. Verifique la función SQL 'ObtenerTodasLasAsignaturas()'. Detalle: " + e.getMessage(), "Error Crítico", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al cargar asignaturas. Verifique si la función SQL 'ObtenerTodasLasAsignaturas()' existe y devuelve los campos correctos. Detalle: " + e.getMessage(), "Error Crítico", JOptionPane.ERROR_MESSAGE);
             
-            // Devolvemos el modelo vacío para evitar el error 'Cannot set a null TableModel' en FrmAsignaturas.
-            return modelo; 
+            return modelo; // Devuelve el modelo vacío
         }
         return modelo;
     }
 
-    // 3. ACTUALIZAR (UPDATE)
+    // =========================================================================
+    // 3. ACTUALIZAR (UPDATE) - CORREGIDO con PreparedStatement
+    // =========================================================================
+    /**
+     * Actualiza una asignatura usando PreparedStatement.
+     * @param datos
+     * @return 
+     */
     public boolean editar(DAsignatura datos) {
-        // Llama al Procedure: CALL ActualizarAsignatura(p_id_asignatura, p_id_curso, p_nombre, p_creditos)
-        sql = "{call ActualizarAsignatura(?, ?, ?, ?)}"; 
+        // Sentencia SQL directa para PostgreSQL
+        String sql = "UPDATE asignatura SET id_curso = ?, nombre = ?, creditos = ? WHERE id_asignatura = ?"; 
         
+        // Se utiliza PreparedStatement en lugar de CallableStatement
         try (Connection cn = conexion.getConnection(); 
-             CallableStatement cs = cn.prepareCall(sql)) {
-             
-            cs.setInt(1, datos.getId_asignatura());
-            cs.setInt(2, datos.getId_curso());
-            cs.setString(3, datos.getNombre());
-            cs.setInt(4, datos.getCreditos());
+             PreparedStatement pst = cn.prepareStatement(sql)) {
+                
+            pst.setInt(1, datos.getId_curso());
+            pst.setString(2, datos.getNombre());
+            pst.setInt(3, datos.getCreditos());
+            pst.setInt(4, datos.getId_asignatura()); // ID en el WHERE
             
-            cs.execute();
+            pst.executeUpdate();
             return true;
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al editar asignatura", e);
-            JOptionPane.showMessageDialog(null, "Error al editar asignatura: " + e.getMessage());
+            logger.log(Level.SEVERE, "Error al editar asignatura (PreparedStatement)", e);
+            JOptionPane.showMessageDialog(null, "Error al editar asignatura: " + e.getMessage(), "Error de BD", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
-    // 4. ELIMINAR (DELETE)
+    // =========================================================================
+    // 4. ELIMINAR (DELETE) - CORREGIDO con PreparedStatement
+    // =========================================================================
+    /**
+     * Elimina una asignatura usando PreparedStatement.
+     * @param datos
+     * @return 
+     */
     public boolean eliminar(DAsignatura datos) {
-        // Llama al Procedure: CALL EliminarAsignatura(p_id_asignatura)
-        sql = "{call EliminarAsignatura(?)}"; 
+        // Sentencia SQL directa para PostgreSQL
+        String sql = "DELETE FROM asignatura WHERE id_asignatura = ?"; 
         
+        // Se utiliza PreparedStatement en lugar de CallableStatement
         try (Connection cn = conexion.getConnection(); 
-             CallableStatement cs = cn.prepareCall(sql)) {
-             
-            cs.setInt(1, datos.getId_asignatura());
-            cs.execute();
+             PreparedStatement pst = cn.prepareStatement(sql)) {
+                
+            pst.setInt(1, datos.getId_asignatura());
+            
+            pst.executeUpdate();
             return true;
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al eliminar asignatura", e);
-            JOptionPane.showMessageDialog(null, "Error al eliminar asignatura: " + e.getMessage());
+            logger.log(Level.SEVERE, "Error al eliminar asignatura (PreparedStatement)", e);
+            JOptionPane.showMessageDialog(null, "Error al eliminar asignatura: " + e.getMessage(), "Error de BD", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+    
+    // =========================================================================
+    // 5. BUSCAR (SEARCH) - NUEVO MÉTODO
+    // =========================================================================
+    /**
+     * Busca asignaturas por nombre de asignatura o nombre de curso.
+     * @param textoBuscar El nombre o parte del nombre a buscar.
+     * @return DefaultTableModel con los resultados filtrados.
+     */
+    public DefaultTableModel buscarAsignaturas(String textoBuscar) {
+        DefaultTableModel modelo = new DefaultTableModel(null, titulos);
+        
+        // Consulta SQL que usa la función y luego filtra los resultados con WHERE
+        String sql = "SELECT * FROM ObtenerTodasLasAsignaturas() " +
+                     "WHERE nombre_asignatura ILIKE ? OR nombre_curso ILIKE ?";
+        
+        // Usamos ILIKE para búsqueda insensible a mayúsculas/minúsculas (PostgreSQL)
+        String terminoBusqueda = "%" + textoBuscar + "%";
+        
+        try (Connection cn = conexion.getConnection();
+             PreparedStatement pst = cn.prepareStatement(sql)) {
+            
+            // Asignamos el término de búsqueda a los parámetros
+            pst.setString(1, terminoBusqueda);
+            pst.setString(2, terminoBusqueda);
+            
+            try (ResultSet rs = pst.executeQuery()) {
+                return llenarModeloDesdeResultSet(rs, modelo);
+            }
+            
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al buscar asignaturas.", e);
+            JOptionPane.showMessageDialog(null, "Error al buscar asignaturas: " + e.getMessage(), "Error de BD", JOptionPane.ERROR_MESSAGE);
+            return modelo; 
+        }
+    }
+
+    private DefaultTableModel llenarModeloDesdeResultSet(ResultSet rs, DefaultTableModel modelo) throws SQLException {
+        while (rs.next()) {
+            String[] registro = new String[5];
+            
+            // Los nombres deben coincidir con los aliases de la función SQL
+            registro[0] = rs.getString("id_asignatura");
+            registro[1] = rs.getString("id_curso");
+            registro[2] = rs.getString("nombre_curso");
+            registro[3] = rs.getString("nombre_asignatura"); 
+            registro[4] = rs.getString("creditos");
+            modelo.addRow(registro);
+        }
+        return modelo;
     }
 }

@@ -15,21 +15,89 @@ import javax.swing.table.DefaultTableModel;
 
 public class LCursos {
     
-    // Declaración sin inicialización para permitir la inicialización en el constructor
+    // Asumo que LConexion contiene el método getConnection() para abrir y cerrar la conexión en cada método.
     private final LConexion conexion; 
     private String sSQL = "";
 
-    // Logger para manejar errores
+    // Logger para manejar errores de forma centralizada
     private static final Logger logger = Logger.getLogger(LCursos.class.getName());
 
     public LCursos() {
-        // Inicialización correcta de la variable final
         this.conexion = new LConexion();
-        // Nota: NO DEBES GUARDAR LA CONEXIÓN EN UNA VARIABLE DE CLASE (this.cn)
-        // La conexión debe obtenerse y cerrarse en cada método para evitar problemas de concurrencia.
     }
 
-    // ========== LISTAR CURSOS POR CORREO ==========
+    // =========================================================================
+    // CONSULTA - Obtener ID por Nombre (CRUD de Asignaturas)
+    // =========================================================================
+    
+    /**
+     * Obtiene el ID del curso usando su nombre. Este método es CRUCIAL para
+     * establecer la clave foránea (FK) id_curso en la tabla Asignaturas.
+     * * @param nombreCurso El nombre del curso seleccionado en el JComboBox.
+     * @return El ID del curso (entero), o -1 si no se encuentra o hay error.
+     */
+    public int obtenerIdCursoPorNombre(String nombreCurso) {
+        // Consulta: Obtener el ID donde el nombre coincida
+        sSQL = "SELECT id_curso FROM curso WHERE nombre = ?";
+        int idCurso = -1; // Valor predeterminado de error
+
+        try (Connection cn = conexion.getConnection();
+             PreparedStatement pst = cn.prepareStatement(sSQL)) {
+                 
+            pst.setString(1, nombreCurso);
+            
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    idCurso = rs.getInt("id_curso"); // Obtiene el valor
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al buscar ID de curso por nombre: " + nombreCurso, e);
+            // No se muestra JOptionPane para este error, ya que el logger es suficiente 
+            // y el formulario maneja el -1 devuelto.
+        }
+        return idCurso;
+    }
+    
+    // =========================================================================
+    // LISTADO - Para JTable/JComboBox (Todos los cursos)
+    // =========================================================================
+
+    /**
+     * Muestra todos los cursos en un DefaultTableModel (usualmente para JTable o para cargar JComboBox).
+     * @return DefaultTableModel con ID y Nombre del curso.
+     */
+    public DefaultTableModel mostrarTodos() {
+        DefaultTableModel modelo;
+        String[] titulos = {"ID", "Nombre"};
+        modelo = new DefaultTableModel(null, titulos);
+        
+        // Consulta simple para listado
+        String sql = "SELECT id_curso, nombre FROM curso ORDER BY nombre ASC"; 
+
+        try (Connection cn = conexion.getConnection();
+             Statement st = cn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+                
+            while (rs.next()) {
+                String[] registro = new String[2];
+                registro[0] = rs.getString("id_curso");
+                registro[1] = rs.getString("nombre");
+                modelo.addRow(registro);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error SQL al cargar todos los cursos", e);
+            JOptionPane.showMessageDialog(null, "Error SQL al cargar cursos: " + e.getMessage());
+            return modelo; // Se devuelve el modelo vacío
+        }
+        return modelo;
+    }
+    
+    // =========================================================================
+    // LISTADO - Cursos Asignados al Estudiante
+    // =========================================================================
+
     public List<DCursos> listarCursosPorCorreo(String correo) {
         List<DCursos> lista = new ArrayList<>();
         sSQL = """
@@ -40,27 +108,29 @@ public class LCursos {
             WHERE u.correo = ?
         """;
 
-        // Usar try-with-resources para obtener la conexión y asegurar su cierre
         try (Connection cn = conexion.getConnection();
              PreparedStatement pst = cn.prepareStatement(sSQL)) {
                  
             pst.setString(1, correo);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                DCursos curso = new DCursos();
-                curso.setId_curso(rs.getInt("id_curso"));
-                curso.setNombre(rs.getString("nombre"));
-                curso.setDescripcion(rs.getString("descripcion"));
-                lista.add(curso);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    DCursos curso = new DCursos();
+                    curso.setId_curso(rs.getInt("id_curso"));
+                    curso.setNombre(rs.getString("nombre"));
+                    curso.setDescripcion(rs.getString("descripcion"));
+                    lista.add(curso);
+                }
             }
-
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al listar cursos por correo", e);
             JOptionPane.showMessageDialog(null, "Error al listar cursos: " + e.getMessage());
         }
         return lista;
     }
+
+    // =========================================================================
+    // MANTENIMIENTO (CRUD Básico)
+    // =========================================================================
 
     // ========== INSERTAR ==========
     public boolean insertarCurso(DCursos curso) {
@@ -114,63 +184,5 @@ public class LCursos {
             JOptionPane.showMessageDialog(null, "Error al eliminar curso: " + e.getMessage());
             return false;
         }
-    }
-
-    /**
-     * Muestra todos los cursos en un DefaultTableModel para ser cargado en un JTable o JComboBox.
-     * @return DefaultTableModel con ID y Nombre del curso.
-     */
-    public DefaultTableModel mostrarTodos() {
-        DefaultTableModel modelo;
-        String[] titulos = {"ID", "Nombre"};
-        modelo = new DefaultTableModel(null, titulos);
-        
-        String sql = "SELECT id_curso, nombre FROM Curso ORDER BY nombre ASC"; 
-
-        try (Connection cn = conexion.getConnection();
-             Statement st = cn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
-            
-            while (rs.next()) {
-                String[] registro = new String[2];
-                registro[0] = rs.getString("id_curso");
-                registro[1] = rs.getString("nombre");
-                modelo.addRow(registro);
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error SQL al cargar todos los cursos", e);
-            JOptionPane.showMessageDialog(null, "Error SQL al cargar cursos: " + e.getMessage());
-            // Se devuelve el modelo vacío en caso de error para evitar NullPointerException en el formulario.
-            return modelo; 
-        }
-        return modelo;
-    }
-    
-    /**
-     * Obtiene el ID del curso usando su nombre.
-     * @param nombreCurso El nombre del curso a buscar.
-     * @return El ID del curso, o -1 si no se encuentra.
-     */
-    public int obtenerIdCursoPorNombre(String nombreCurso) {
-        sSQL = "SELECT id_curso FROM curso WHERE nombre = ?";
-        int idCurso = -1;
-
-        try (Connection cn = conexion.getConnection();
-             PreparedStatement pst = cn.prepareStatement(sSQL)) {
-                 
-            pst.setString(1, nombreCurso);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                idCurso = rs.getInt("id_curso");
-            }
-            
-            // No es necesario cerrar rs explícitamente ya que el try-with-resources en pst se encarga
-            // de cerrar todos los recursos cuando se cierran pst y cn.
-
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al buscar ID de curso por nombre: " + nombreCurso, e);
-        }
-        return idCurso;
     }
 }

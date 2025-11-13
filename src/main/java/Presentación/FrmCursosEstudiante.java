@@ -32,6 +32,10 @@ private final LCursosEstudiantes Lógica;
 
         cargarCursos();
     }
+
+    FrmCursosEstudiante() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
         private void cargarCursos() {
         DefaultTableModel modelo = (DefaultTableModel) TablaCursosEstudiante.getModel();
         modelo.setRowCount(0); // limpiar
@@ -127,4 +131,8 @@ private final LCursosEstudiantes Lógica;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    void setLocationRelativeTo(Object object) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

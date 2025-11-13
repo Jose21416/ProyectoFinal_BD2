@@ -23,24 +23,47 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         mostrarAsignaturas();
         limpiarCampos();
 
-        // Asignar el evento click a la tabla
+        // --- CORRECCIÓN 1: Evento Click de la tabla simplificado ---
         tablaListado.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 tablaListadoMouseClicked(evt);
             }
-            private void tablaListadoMouseClicked(java.awt.event.MouseEvent evt) {
-                btnGuardar.setText("Actualizar"); 
-    
-                int fila = tablaListado.getSelectedRow();
-                txtIdAsignatura.setText(tablaListado.getValueAt(fila, 0).toString());
-                cmbCurso.setSelectedItem(tablaListado.getValueAt(fila, 2).toString()); 
-                txtNombreAsignatura.setText(tablaListado.getValueAt(fila, 3).toString());
-                String creditosStr = tablaListado.getValueAt(fila, 4).toString();
-                spinCreditos.setValue(Integer.valueOf(creditosStr));            }
         });
     }
     
+    // --- CORRECCIÓN 1: Evento Click de la tabla (Implementación) ---
+    private void tablaListadoMouseClicked(java.awt.event.MouseEvent evt) {
+        // Al hacer clic, se asume que se va a editar
+        btnGuardar.setText("Actualizar"); 
+        
+        int fila = tablaListado.getSelectedRow();
+        if (fila < 0) return; // Si no hay fila seleccionada, salir
+        
+        // Las columnas del modelo son: 0:ID Asig, 1: ID Curso, 2: Curso, 3: Asignatura, 4: Créditos
+        
+        // ID Asignatura
+        txtIdAsignatura.setText(tablaListado.getValueAt(fila, 0).toString());
+        
+        // Seleccionar el Curso por su NOMBRE (Columna 2)
+        String nombreCursoTabla = tablaListado.getValueAt(fila, 2).toString();
+        cmbCurso.setSelectedItem(nombreCursoTabla); 
+        
+        // Nombre de la Asignatura
+        txtNombreAsignatura.setText(tablaListado.getValueAt(fila, 3).toString());
+        
+        // Créditos
+        String creditosStr = tablaListado.getValueAt(fila, 4).toString();
+        try {
+            spinCreditos.setValue(Integer.valueOf(creditosStr));
+        } catch (NumberFormatException ex) {
+            spinCreditos.setValue(0);
+        }
+        
+        // Habilitar botones si se selecciona algo
+        btnGuardar.setEnabled(true);
+        btnEliminar.setEnabled(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -125,12 +148,13 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtIdAsignatura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtNombreAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(spinCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtIdAsignatura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombreAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -251,6 +275,11 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         jLabel8.setText("Buscar por Nombre:");
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tablaListado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -260,7 +289,7 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID", "Curso", "Asignatura", "Créditos"
+                "ID", "Nombre", "Asignatura", "Créditos"
             }
         ));
         jScrollPane1.setViewportView(tablaListado);
@@ -386,8 +415,10 @@ public class FrmAsignaturas extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
     limpiarCampos();
-    btnGuardar.setText("Guardar"); 
-    txtNombreAsignatura.requestFocus();   
+        btnGuardar.setText("Guardar"); 
+        btnGuardar.setEnabled(true);
+        btnEliminar.setEnabled(false); // No se puede eliminar algo que es nuevo
+        txtNombreAsignatura.requestFocus();  
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -396,9 +427,9 @@ public class FrmAsignaturas extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
     // --- 1. Validación Básica ---
-    if (txtNombreAsignatura.getText().isEmpty() || cmbCurso.getSelectedItem() == null) {
-        JOptionPane.showMessageDialog(this, "Debe ingresar el nombre y seleccionar un curso.");
-        return;
+        if (txtNombreAsignatura.getText().isEmpty() || cmbCurso.getSelectedIndex() <= 0) { // MEJORA: Validar el índice 0 (el mensaje de 'Seleccione')
+            JOptionPane.showMessageDialog(this, "Debe ingresar el nombre y seleccionar un curso válido.");
+            return;
     }
 
     DAsignatura datos = new DAsignatura();
@@ -406,19 +437,26 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     // --- 2. Obtener Llave Foránea (FK): ID_CURSO ---
     String nombreCurso = cmbCurso.getSelectedItem().toString();
     // NOTA: Este método (obtenerIdCursoPorNombre) debe estar implementado en tu LCursos.java
-    int idCurso = logicaCursos.obtenerIdCursoPorNombre(nombreCurso); 
-    
+    int idCurso = logicaCursos.obtenerIdCursoPorNombre(nombreCurso);  
+
     if (idCurso == -1) {
-         JOptionPane.showMessageDialog(this, "Error: Curso no encontrado. Imposible crear/editar.", "Error de FK", JOptionPane.ERROR_MESSAGE);
-         return;
+        JOptionPane.showMessageDialog(this, "Error: Curso no encontrado. Imposible crear/editar.", "Error de FK", JOptionPane.ERROR_MESSAGE);
+        return;
     }
 
     // --- 3. Cargar Datos ---
-    datos.setId_curso(idCurso);
-    datos.setNombre(txtNombreAsignatura.getText());
-    datos.setCreditos((Integer) spinCreditos.getValue()); // El spinner devuelve un Object, se hace un cast a Integer
-    
-    boolean gestionExitosa = false;
+        datos.setId_curso(idCurso);
+        datos.setNombre(txtNombreAsignatura.getText());
+        
+        // MEJORA: Validar el valor del Spinner (debe ser > 0)
+        int creditos = (Integer) spinCreditos.getValue();
+        if (creditos <= 0) {
+            JOptionPane.showMessageDialog(this, "Los créditos deben ser un valor positivo.");
+            return;
+        }
+        datos.setCreditos(creditos);
+        
+        boolean gestionExitosa = false;
     
     // --- 4. Determinar Operación (CREATE vs UPDATE) ---
     if (txtIdAsignatura.getText().isEmpty()) { 
@@ -437,7 +475,7 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         limpiarCampos();
     } else {
         JOptionPane.showMessageDialog(this, "Ocurrió un error al guardar o actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
-    }        // TODO add your handling code here:
+        }        // TODO add your handling code here:
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -462,9 +500,32 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+    limpiarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+// 1. Crear una instancia de la lógica
+    LAsignatura func = new LAsignatura();
+    
+    // 2. Obtener el texto ingresado en el campo
+    String texto = txtBuscar.getText();
+    
+    // VALIDACIÓN BÁSICA: Si el campo está vacío, muestre todas las asignaturas.
+    if (texto.isEmpty()) {
+        mostrarTodasLasAsignaturas(); // Asuma que tiene un método para cargar todas
+        return;
+    }
+    
+    // 3. Llamar al nuevo método de búsqueda
+    DefaultTableModel modelo = func.buscarAsignaturas(texto);
+    
+    // 4. Asignar el modelo a la tabla
+    tablaListado.setModel(modelo);
+    
+    // Opcional: Mostrar el número de resultados (si aplica)
+    // lblTotalRegistros.setText("Total de Registros: " + modelo.getRowCount());
+    }//GEN-LAST:event_btnBuscarActionPerformed
+ 
     /**
      * @param args the command line arguments
      */
@@ -531,46 +592,56 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     }
 
     // 2. Obtener el modelo de datos desde la lógica
-    // logicaCursos es una instancia de la clase LCursos que ya tienes declarada.
-    DefaultTableModel modeloCursos = logicaCursos.mostrarTodos();
+        DefaultTableModel modeloCursos = logicaCursos.mostrarTodos();
 
-    if (modeloCursos != null) {
-        cmbCurso.addItem("--- Seleccione un Curso ---");
+        if (modeloCursos != null) {
+            cmbCurso.addItem("--- Seleccione un Curso ---");
 
-        int numFilas = modeloCursos.getRowCount();
-        int columnaNombre = 1;
+            int numFilas = modeloCursos.getRowCount();
+            int columnaNombre = 1; // Asumo que la columna 1 contiene el nombre del curso en el modelo de LCursos
 
-        for (int i = 0; i < numFilas; i++) {
-            String nombreCurso = modeloCursos.getValueAt(i, columnaNombre).toString();
-            cmbCurso.addItem(nombreCurso);
+            for (int i = 0; i < numFilas; i++) {
+                String nombreCurso = modeloCursos.getValueAt(i, columnaNombre).toString();
+                cmbCurso.addItem(nombreCurso);
+            }
+        } else {
+            // Esto se ejecutará si LCursos.mostrarTodos() devuelve null debido a un error de conexión/BD.
+            cmbCurso.addItem("Error al cargar Cursos");
+            cmbCurso.setEnabled(false);
         }
-    } else {
-        // Esto se ejecutará si LCursos.mostrarTodos() devuelve null debido a un error de conexión/BD.
-        cmbCurso.addItem("Error al cargar Cursos");
-        cmbCurso.setEnabled(false);
     }
-}
 
     private void mostrarAsignaturas() {
-    DefaultTableModel modelo = logicaAsignatura.mostrarTodas();
-    tablaListado.setModel(modelo);
-    
-    // Ocultar la columna ID Curso (columna 1) para un listado más limpio
-    tablaListado.getColumnModel().getColumn(1).setPreferredWidth(0);
-    tablaListado.getColumnModel().getColumn(1).setMaxWidth(0);
-    tablaListado.getColumnModel().getColumn(1).setMinWidth(0);
+        // Se utiliza un objeto DAsignatura vacío para listar todas, o con el texto de búsqueda.
+        DAsignatura dts = new DAsignatura();
+        dts.setNombre(txtBuscar.getText());
+        
+        DefaultTableModel modelo = logicaAsignatura.mostrarTodas();
+        tablaListado.setModel(modelo);
+        
+        // Ocultar la columna ID Curso (columna 1)
+        tablaListado.getColumnModel().getColumn(1).setPreferredWidth(0);
+        tablaListado.getColumnModel().getColumn(1).setMaxWidth(0);
+        tablaListado.getColumnModel().getColumn(1).setMinWidth(0);
     }
 
     private void limpiarCampos() {
-    txtIdAsignatura.setText("");
-    txtNombreAsignatura.setText("");
-    // Se asume que el ComboBox tiene al menos un elemento o se selecciona el primero.
-    if (cmbCurso.getItemCount() > 0) {
-        cmbCurso.setSelectedIndex(0); 
+        txtIdAsignatura.setText("");
+        txtNombreAsignatura.setText("");
+        if (cmbCurso.getItemCount() > 0) {
+            cmbCurso.setSelectedIndex(0); 
+        }
+        spinCreditos.setValue(1); // Se inicializa en 1 (o el mínimo definido)
+        txtBuscar.setText(""); 
+        btnGuardar.setText("Guardar");
+        txtIdAsignatura.setVisible(false); // Mantener oculto
+        
+        // Deshabilitar botones al limpiar, solo se habilita al seleccionar
+        btnGuardar.setEnabled(true);
+        btnEliminar.setEnabled(false);
     }
-    spinCreditos.setValue(0);
-    txtBuscar.setText(""); 
-    btnGuardar.setText("Guardar");
-    txtIdAsignatura.setVisible(false); // Mantener oculto
+
+    private void mostrarTodasLasAsignaturas() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
