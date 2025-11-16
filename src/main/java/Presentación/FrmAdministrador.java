@@ -119,7 +119,7 @@ public class FrmAdministrador extends javax.swing.JFrame {
         log.show();
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+//5435345346
     private void CursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CursosActionPerformed
      Presentación.FrmCursos frm = new Presentación.FrmCursos();
     frm.setVisible(true);     
@@ -129,7 +129,7 @@ public class FrmAdministrador extends javax.swing.JFrame {
         Presentación.FrmAsignaturas frm = new Presentación.FrmAsignaturas();
         frm.setVisible(true);   
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
+//...
     /**
      * @param args the command line arguments
      */
