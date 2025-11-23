@@ -15,17 +15,14 @@ public class FrmCursos extends javax.swing.JFrame {
 
     LCursos logica = new LCursos();
     
-    public FrmCursos() {
+   public FrmCursos() {
         initComponents();
         setLocationRelativeTo(null);
-        mostrarColumnas();
+        mostrarCursos(); // Cargar los cursos al abrir el formulario
     }
-
-        private void mostrarColumnas() {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Descripción");
+   
+    private void mostrarCursos() {
+        DefaultTableModel modelo = logica.mostrarTodos();
         tablacursos.setModel(modelo);
     }
         
@@ -159,8 +156,8 @@ public class FrmCursos extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)
-                        .addGap(46, 46, 46)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(InsertarCursos, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,17 +165,16 @@ public class FrmCursos extends javax.swing.JFrame {
                         .addComponent(ActualizarCursos, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
+                        .addGap(11, 11, 11)
                         .addComponent(jLabel3)
-                        .addGap(30, 30, 30)
-                        .addComponent(jTextField3)
-                        .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
                         .addComponent(EliminarCursos, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addComponent(LimpiarCursos, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))))
+                        .addComponent(LimpiarCursos, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(15, 15, 15))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -236,7 +232,8 @@ public class FrmCursos extends javax.swing.JFrame {
             if (confirm == JOptionPane.YES_OPTION) {
                 if (logica.eliminarCurso(id)) {
                     JOptionPane.showMessageDialog(this, "Curso eliminado correctamente.");
-                    //BuscarActionPerformed(null); // refresca tabla
+                    mostrarCursos();  // 🔥 refresca tabla
+                    limpiarCampos();
                 }
             }
         } else {
@@ -249,7 +246,7 @@ public class FrmCursos extends javax.swing.JFrame {
     }//GEN-LAST:event_LimpiarCursosActionPerformed
 
     private void InsertarCursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InsertarCursosActionPerformed
-         String nombre = jTextField2.getText().trim();
+        String nombre = jTextField2.getText().trim();
         String descripcion = jTextField3.getText().trim();
 
         if (nombre.isEmpty() || descripcion.isEmpty()) {
@@ -263,7 +260,8 @@ public class FrmCursos extends javax.swing.JFrame {
 
         if (logica.insertarCurso(curso)) {
             JOptionPane.showMessageDialog(this, "Curso agregado correctamente.");
-            //BuscarActionPerformed(null); // refresca tabla
+            mostrarCursos();  // 🔥 REFRESCA LA TABLA
+            limpiarCampos();  // 🔥 LIMPIA LOS CAMPOS
         }
     }//GEN-LAST:event_InsertarCursosActionPerformed
 
@@ -287,20 +285,22 @@ public class FrmCursos extends javax.swing.JFrame {
 
             if (logica.actualizarCurso(curso)) {
                 JOptionPane.showMessageDialog(this, "Curso actualizado correctamente.");
-                //BuscarActionPerformed(null); // refresca tabla
+                mostrarCursos();  // 🔥 refresca tabla
+                limpiarCampos();
             }
 
         } else {
             JOptionPane.showMessageDialog(this, "Seleccione un curso para actualizar.");
         }
     }//GEN-LAST:event_ActualizarCursosActionPerformed
-        private void tablacursosMouseClicked(java.awt.event.MouseEvent evt) {
+    private void tablacursosMouseClicked(java.awt.event.MouseEvent evt) {
         int fila = tablacursos.getSelectedRow();
         if (fila >= 0) {
             jTextField2.setText(tablacursos.getValueAt(fila, 1).toString());
             jTextField3.setText(tablacursos.getValueAt(fila, 2).toString());
         }
     }
+
     /**
      * @param args the command line arguments
      */

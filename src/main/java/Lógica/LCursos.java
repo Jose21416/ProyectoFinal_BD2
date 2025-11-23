@@ -26,113 +26,51 @@ public class LCursos {
         this.conexion = new LConexion();
     }
 
-    // =========================================================================
-    // CONSULTA - Obtener ID por Nombre (CRUD de Asignaturas)
-    // =========================================================================
-    
-    /**
-     * Obtiene el ID del curso usando su nombre. Este método es CRUCIAL para
-     * establecer la clave foránea (FK) id_curso en la tabla Asignaturas.
-     * * @param nombreCurso El nombre del curso seleccionado en el JComboBox.
-     * @return El ID del curso (entero), o -1 si no se encuentra o hay error.
-     */
     public int obtenerIdCursoPorNombre(String nombreCurso) {
-        // Consulta: Obtener el ID donde el nombre coincida
-        sSQL = "SELECT id_curso FROM curso WHERE nombre = ?";
-        int idCurso = -1; // Valor predeterminado de error
+        String sql = "SELECT id_curso FROM curso WHERE nombre = ? LIMIT 1";
 
-        try (Connection cn = conexion.getConnection();
-             PreparedStatement pst = cn.prepareStatement(sSQL)) {
-                 
+        try (Connection cn = conexion.getConnection(); PreparedStatement pst = cn.prepareStatement(sql)) {
+
             pst.setString(1, nombreCurso);
-            
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    idCurso = rs.getInt("id_curso"); // Obtiene el valor
-                }
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id_curso");
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al buscar ID de curso por nombre: " + nombreCurso, e);
-            // No se muestra JOptionPane para este error, ya que el logger es suficiente 
-            // y el formulario maneja el -1 devuelto.
+            System.out.println("Error al obtener ID del curso: " + e.getMessage());
         }
-        return idCurso;
+
+        return -1; // Si no encuentra ninguno
     }
     
-    // =========================================================================
-    // LISTADO - Para JTable/JComboBox (Todos los cursos)
-    // =========================================================================
-
-    /**
-     * Muestra todos los cursos en un DefaultTableModel (usualmente para JTable o para cargar JComboBox).
-     * @return DefaultTableModel con ID y Nombre del curso.
-     */
     public DefaultTableModel mostrarTodos() {
         DefaultTableModel modelo;
-        String[] titulos = {"ID", "Nombre"};
+        String[] titulos = {"ID", "Nombre", "Descripción"};
         modelo = new DefaultTableModel(null, titulos);
-        
-        // Consulta simple para listado
-        String sql = "SELECT id_curso, nombre FROM curso ORDER BY nombre ASC"; 
 
-        try (Connection cn = conexion.getConnection();
-             Statement st = cn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
-                
+        String sql = "SELECT id_curso, nombre, descripcion FROM curso ORDER BY nombre ASC";
+
+        try (Connection cn = conexion.getConnection(); Statement st = cn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+
             while (rs.next()) {
-                String[] registro = new String[2];
+                String[] registro = new String[3];
                 registro[0] = rs.getString("id_curso");
                 registro[1] = rs.getString("nombre");
+                registro[2] = rs.getString("descripcion");
                 modelo.addRow(registro);
             }
+
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error SQL al cargar todos los cursos", e);
             JOptionPane.showMessageDialog(null, "Error SQL al cargar cursos: " + e.getMessage());
-            return modelo; // Se devuelve el modelo vacío
         }
+
         return modelo;
     }
+
     
-    // =========================================================================
-    // LISTADO - Cursos Asignados al Estudiante
-    // =========================================================================
-
-    public List<DCursos> listarCursosPorCorreo(String correo) {
-        List<DCursos> lista = new ArrayList<>();
-        sSQL = """
-            SELECT c.id_curso, c.nombre, c.descripcion
-            FROM curso c
-            INNER JOIN estudiante_curso ec ON ec.id_curso = c.id_curso
-            INNER JOIN usuario u ON u.id_usuario = ec.id_usuario
-            WHERE u.correo = ?
-        """;
-
-        try (Connection cn = conexion.getConnection();
-             PreparedStatement pst = cn.prepareStatement(sSQL)) {
-                 
-            pst.setString(1, correo);
-            try (ResultSet rs = pst.executeQuery()) {
-                while (rs.next()) {
-                    DCursos curso = new DCursos();
-                    curso.setId_curso(rs.getInt("id_curso"));
-                    curso.setNombre(rs.getString("nombre"));
-                    curso.setDescripcion(rs.getString("descripcion"));
-                    lista.add(curso);
-                }
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al listar cursos por correo", e);
-            JOptionPane.showMessageDialog(null, "Error al listar cursos: " + e.getMessage());
-        }
-        return lista;
-    }
-
-    // =========================================================================
-    // MANTENIMIENTO (CRUD Básico)
-    // =========================================================================
-
-    // ========== INSERTAR ==========
+ 
     public boolean insertarCurso(DCursos curso) {
         sSQL = "INSERT INTO curso (nombre, descripcion) VALUES (?, ?)";
         try (Connection cn = conexion.getConnection();
