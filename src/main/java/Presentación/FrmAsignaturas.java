@@ -22,6 +22,7 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         cargarCursosCombo();
         mostrarAsignaturas();
         limpiarCampos();
+        setLocationRelativeTo(null);
 
         // --- CORRECCIÓN 1: Evento Click de la tabla simplificado ---
         tablaListado.addMouseListener(new MouseAdapter() {

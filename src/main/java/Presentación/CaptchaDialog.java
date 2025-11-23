@@ -26,6 +26,7 @@ public class CaptchaDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         generarNuevoCaptcha();
+        setLocationRelativeTo(null);
     }
     public boolean isVerificado() {
         return verificado;

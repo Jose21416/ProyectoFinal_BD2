@@ -79,16 +79,21 @@ public class LRecuperación {
     
     public boolean actualizarContraseña(int id_usuario, String nuevaContraseña) {
         String sql = "UPDATE usuario SET contrasena = ? WHERE id_usuario = ?";
-        
+
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setString(1, nuevaContraseña);
+
+            String hash = LHash.hashPassword(nuevaContraseña);
+
+            ps.setString(1, hash);     
             ps.setInt(2, id_usuario);
+
             return ps.executeUpdate() > 0;
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al actualizar la contraseña: " + e.getMessage());
             return false;
         }
     }
-    
+
     
 }

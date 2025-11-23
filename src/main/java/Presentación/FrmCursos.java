@@ -32,7 +32,6 @@ public class FrmCursos extends javax.swing.JFrame {
      private void limpiarCampos() {
         jTextField2.setText(""); // nombre
         jTextField3.setText(""); // descripción
-        Correo.setText("");      // correo
         tablacursos.clearSelection();
     }
     @SuppressWarnings("unchecked")
@@ -41,9 +40,6 @@ public class FrmCursos extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        Buscar = new javax.swing.JButton();
-        Correo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablacursos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -57,25 +53,9 @@ public class FrmCursos extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBackground(new java.awt.Color(0, 102, 0));
 
-        jPanel2.setBackground(new java.awt.Color(204, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("Palatino Linotype", 0, 18)); // NOI18N
-        jLabel1.setText("Correo del estudiante:");
-
-        Buscar.setText("Buscar");
-        Buscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BuscarActionPerformed(evt);
-            }
-        });
-
-        Correo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CorreoActionPerformed(evt);
-            }
-        });
+        jPanel2.setBackground(new java.awt.Color(0, 204, 0));
 
         tablacursos.setBackground(new java.awt.Color(204, 204, 204));
         tablacursos.setModel(new javax.swing.table.DefaultTableModel(
@@ -108,30 +88,18 @@ public class FrmCursos extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Correo, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Buscar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(Buscar)
-                    .addComponent(Correo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(138, 138, 138))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nombre:");
 
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
@@ -141,6 +109,7 @@ public class FrmCursos extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Descripción:");
 
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
@@ -215,7 +184,7 @@ public class FrmCursos extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -245,10 +214,6 @@ public class FrmCursos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void CorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CorreoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CorreoActionPerformed
-
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
@@ -256,30 +221,6 @@ public class FrmCursos extends javax.swing.JFrame {
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
-         String correo = Correo.getText().trim();
-        if (correo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor ingrese un correo.");
-            return;
-        }
-
-        List<DCursos> lista = logica.listarCursosPorCorreo(correo);
-        DefaultTableModel modelo = (DefaultTableModel) tablacursos.getModel();
-        modelo.setRowCount(0);
-
-        for (DCursos c : lista) {
-            modelo.addRow(new Object[]{
-                c.getId_curso(),
-                c.getNombre(),
-                c.getDescripcion()
-            });
-        }
-
-        if (lista.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se encontraron cursos para este estudiante.");
-        }
-    }//GEN-LAST:event_BuscarActionPerformed
 
     private void EliminarCursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarCursosActionPerformed
           int fila = tablacursos.getSelectedRow();
@@ -295,7 +236,7 @@ public class FrmCursos extends javax.swing.JFrame {
             if (confirm == JOptionPane.YES_OPTION) {
                 if (logica.eliminarCurso(id)) {
                     JOptionPane.showMessageDialog(this, "Curso eliminado correctamente.");
-                    BuscarActionPerformed(null); // refresca tabla
+                    //BuscarActionPerformed(null); // refresca tabla
                 }
             }
         } else {
@@ -322,7 +263,7 @@ public class FrmCursos extends javax.swing.JFrame {
 
         if (logica.insertarCurso(curso)) {
             JOptionPane.showMessageDialog(this, "Curso agregado correctamente.");
-            BuscarActionPerformed(null); // refresca tabla
+            //BuscarActionPerformed(null); // refresca tabla
         }
     }//GEN-LAST:event_InsertarCursosActionPerformed
 
@@ -346,7 +287,7 @@ public class FrmCursos extends javax.swing.JFrame {
 
             if (logica.actualizarCurso(curso)) {
                 JOptionPane.showMessageDialog(this, "Curso actualizado correctamente.");
-                BuscarActionPerformed(null); // refresca tabla
+                //BuscarActionPerformed(null); // refresca tabla
             }
 
         } else {
@@ -397,12 +338,9 @@ public class FrmCursos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ActualizarCursos;
-    private javax.swing.JButton Buscar;
-    private javax.swing.JTextField Correo;
     private javax.swing.JButton EliminarCursos;
     private javax.swing.JButton InsertarCursos;
     private javax.swing.JButton LimpiarCursos;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;

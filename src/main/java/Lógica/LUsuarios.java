@@ -13,26 +13,36 @@ public class LUsuarios {
 
     public boolean validarLogin(DUsuarios usu) {
         String sql = """
-            SELECT usuario, contrasena, estado, tipo_usuario
-            FROM usuario
-            WHERE TRIM(LOWER(usuario)) = TRIM(LOWER(?))
-            AND TRIM(contrasena) = TRIM(?)
-        """;
+        SELECT usuario, contrasena, estado, tipo_usuario
+        FROM usuario
+        WHERE TRIM(LOWER(usuario)) = TRIM(LOWER(?))
+    """;
 
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
+
             ps.setString(1, usu.getUsuario());
-            ps.setString(2, usu.getContrasena());
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                String estado = rs.getString("estado");
-                String tipo = rs.getString("tipo_usuario");
 
+                String hashBD = rs.getString("contrasena"); 
+                String hashIngresado = LHash.hashPassword(usu.getContrasena()); 
+
+                // 2. Comparar hash ingresado con hash de la BD
+                if (!hashBD.equals(hashIngresado)) {
+                    JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
+                    return false;
+                }
+
+                // 3. Validar estado
+                String estado = rs.getString("estado");
                 if (!estado.equalsIgnoreCase("activo")) {
                     JOptionPane.showMessageDialog(null, "El usuario está inactivo");
                     return false;
                 }
 
+                // 4. Validar tipo usuario
+                String tipo = rs.getString("tipo_usuario");
                 if (!tipo.equalsIgnoreCase(usu.getTipoUsuario().name().toLowerCase())) {
                     JOptionPane.showMessageDialog(null, "Tipo de usuario incorrecto");
                     return false;
@@ -41,7 +51,7 @@ public class LUsuarios {
                 DUsuarios.usuarioLogueado = rs.getString("usuario");
                 return true;
             } else {
-                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+                JOptionPane.showMessageDialog(null, "Usuario no encontrado");
             }
 
         } catch (SQLException e) {
@@ -51,26 +61,32 @@ public class LUsuarios {
         return false;
     }
 
+
     public boolean crearUsuario(String usuario, String nombre, String correo, String contrasena, String telefono, String tipoUsuario) {
         String sql = "CALL CrearUsuario(?, ?, ?, ?, ?, ?)";
 
         try (CallableStatement cs = cn.prepareCall(sql)) {
+
+            String hash = LHash.hashPassword(contrasena);
+
             cs.setString(1, usuario);
             cs.setString(2, nombre);
             cs.setString(3, correo);
-            cs.setString(4, contrasena);
+            cs.setString(4, hash);       
             cs.setString(5, telefono);
             cs.setString(6, tipoUsuario.toLowerCase());
 
             cs.execute();
             JOptionPane.showMessageDialog(null, "Usuario creado correctamente");
             return true;
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al crear usuario: " + e.getMessage());
         }
 
         return false;
     }
+
 
     public DefaultTableModel mostrarUsuarios(DUsuarios dts) {
         String[] titulos = {"ID", "Nombre", "Telefono", "Correo", "Usuario", "Contraseña", "Tipo de Usuario", "Estado"};
