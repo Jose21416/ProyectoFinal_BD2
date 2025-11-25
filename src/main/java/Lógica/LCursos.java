@@ -15,11 +15,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class LCursos {
     
-    // Asumo que LConexion contiene el método getConnection() para abrir y cerrar la conexión en cada método.
     private final LConexion conexion; 
     private String sSQL = "";
-
-    // Logger para manejar errores de forma centralizada
     private static final Logger logger = Logger.getLogger(LCursos.class.getName());
 
     public LCursos() {
@@ -42,7 +39,7 @@ public class LCursos {
             System.out.println("Error al obtener ID del curso: " + e.getMessage());
         }
 
-        return -1; // Si no encuentra ninguno
+        return -1; 
     }
     
     public DefaultTableModel mostrarTodos() {
@@ -88,7 +85,6 @@ public class LCursos {
         }
     }
 
-    // ========== ACTUALIZAR ==========
     public boolean actualizarCurso(DCursos curso) {
         sSQL = "UPDATE curso SET nombre = ?, descripcion = ? WHERE id_curso = ?";
         try (Connection cn = conexion.getConnection();
@@ -107,7 +103,6 @@ public class LCursos {
         }
     }
 
-    // ========== ELIMINAR ==========
     public boolean eliminarCurso(int idCurso) {
         sSQL = "DELETE FROM curso WHERE id_curso = ?";
         try (Connection cn = conexion.getConnection();
@@ -122,5 +117,25 @@ public class LCursos {
             JOptionPane.showMessageDialog(null, "Error al eliminar curso: " + e.getMessage());
             return false;
         }
+    }
+    
+    public List<DCursos> listarCursos() {
+        List<DCursos> lista = new ArrayList<>();
+        sSQL = "SELECT id_curso, nombre FROM curso ORDER BY nombre"; 
+
+        try (Connection cn = conexion.getConnection(); PreparedStatement pst = cn.prepareStatement(sSQL); ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                DCursos curso = new DCursos();
+                curso.setId_curso(rs.getInt("id_curso"));
+                curso.setNombre(rs.getString("nombre"));
+                lista.add(curso);
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al listar cursos", e);
+        }
+
+        return lista;
     }
 }

@@ -3,6 +3,7 @@ package Datos;
 public class DUsuarios {
     
     private int id_usuario;
+    private int id_curso;
     private String usuario;
     private String nombre;
     private String correo;
@@ -22,21 +23,27 @@ public class DUsuarios {
     public DUsuarios() {
     }
 
-    public DUsuarios(int id_usuario, String usuario, String nombre, String correo, String contrasena, String telefono, TipoUsuario tipoUsuario, Estado estado) {
+    public DUsuarios(int id_usuario, String nombre) {
         this.id_usuario = id_usuario;
+        this.nombre = nombre;
+    }
+
+    public DUsuarios(int id_usuario, int id_curso, String usuario, String nombre, String correo, String contrasena, String telefono) {
+        this.id_usuario = id_usuario;
+        this.id_curso = id_curso;
         this.usuario = usuario;
         this.nombre = nombre;
         this.correo = correo;
         this.contrasena = contrasena;
         this.telefono = telefono;
-        this.tipoUsuario = tipoUsuario != null ? tipoUsuario : TipoUsuario.ESTUDIANTE;
-        this.estado = estado != null ? estado : Estado.ACTIVO;
     }
     
-    public DUsuarios(String usuario, String nombre, String correo, String contrasena, String telefono, TipoUsuario tipoUsuario, Estado estado) {
-        this(0, usuario, nombre, correo, contrasena, telefono, tipoUsuario, estado);
+    public DUsuarios(int id_usuario, int id_curso) {
+        this.id_usuario = id_usuario;
+        this.id_curso = id_curso;
     }
 
+   
     public int getId_usuario() {
         return id_usuario;
     }
@@ -44,7 +51,16 @@ public class DUsuarios {
     public void setId_usuario(int id_usuario) {
         this.id_usuario = id_usuario;
     }
+    
+     public int getId_curso() {
+        return id_curso;
+    }
 
+    public void setId_curso(int id_curso) {
+        this.id_curso = id_curso;
+    }
+
+    
     public String getUsuario() {
         return usuario;
     }
@@ -102,4 +118,12 @@ public class DUsuarios {
     }
     
     public static String usuarioLogueado;
+
+    @Override
+    public String toString() {
+        return nombre; 
+    }
+    
+    
+    
 }

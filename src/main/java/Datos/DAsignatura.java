@@ -6,17 +6,15 @@ public class DAsignatura {
     private int id_curso;
     private String nombre;
     private int creditos;
-    private String nombreCurso;
 
     public DAsignatura() {
     }
 
-    public DAsignatura(int id_asignatura, int id_curso, String nombre, int creditos, String nombreCurso) {
+    public DAsignatura(int id_asignatura, int id_curso, String nombre, int creditos) {
         this.id_asignatura = id_asignatura;
         this.id_curso = id_curso;
         this.nombre = nombre;
         this.creditos = creditos;
-        this.nombreCurso = nombreCurso;
     }
 
     public int getId_asignatura() {
@@ -51,12 +49,9 @@ public class DAsignatura {
         this.creditos = creditos;
     }
     
-    public String getNombreCurso() {
-        return nombreCurso;
-    }
-    
-    public void setNombreCurso() {
-        this.nombreCurso = nombreCurso;
+    @Override
+    public String toString() {
+        return nombre;
     }
     
 }

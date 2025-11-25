@@ -5,7 +5,7 @@
 package Presentación;
 
 
-import Datos.DCursos;
+import Datos.DAsignatura;
 import Lógica.LCursosEstudiantes;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -13,42 +13,53 @@ import javax.swing.table.DefaultTableModel;
 
 public class FrmCursosEstudiante extends javax.swing.JInternalFrame {
     
-private final int idUsuario;
-private final LCursosEstudiantes Lógica;
+    private final int id_usuario;
+    private final LCursosEstudiantes logica;
     
-    public FrmCursosEstudiante(int idUsuario) {
+    public FrmCursosEstudiante(int id_usuario) {
         initComponents();
-        this.idUsuario = idUsuario;
-        this.Lógica = new LCursosEstudiantes();
-
-
-        // Configuración inicial
+        DefaultTableModel modeloCorrecto = new DefaultTableModel(
+                new Object[]{"ID", "Nombre", "Curso", "Asignatura"},
+                0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+        TablaCursosEstudiante.setModel(modeloCorrecto);
+        this.id_usuario = id_usuario;
+        this.logica = new LCursosEstudiantes();
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Mis Cursos");
+        setTitle("Mis Asignaturas");
         setVisible(true);
-
-        cargarCursos();
+        cargarAsignaturas();
     }
-
-    FrmCursosEstudiante() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-        private void cargarCursos() {
+    
+    private void cargarAsignaturas() {
         DefaultTableModel modelo = (DefaultTableModel) TablaCursosEstudiante.getModel();
-        modelo.setRowCount(0); // limpiar
+        modelo.setRowCount(0);
 
-        List<DCursos> lista = Lógica.listarCursosPorEstudiante(idUsuario);
+        String nombreEstudiante = logica.obtenerNombreEstudiante(id_usuario);
+        String nombreCurso = logica.obtenerNombreCursoEstudiante(id_usuario);
 
-
-        for (DCursos c : lista) {
-            modelo.addRow(new Object[]{c.getId_curso(), c.getNombre(), c.getDescripcion()});
+        if (nombreCurso == null) {
+            JOptionPane.showMessageDialog(this, "No estás inscrito en ningún curso.");
+            return;
         }
 
+        List<DAsignatura> lista = logica.listarAsignaturasPorEstudiante(id_usuario);
+
         if (lista.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No estás inscrito en ningún curso.");
+            JOptionPane.showMessageDialog(this, "No hay asignaturas para tu curso.");
+            return;
+        }
+
+        for (DAsignatura a : lista) {
+            modelo.addRow(new Object[]{id_usuario, nombreEstudiante, nombreCurso, a.getNombre()});
         }
     }
         
@@ -101,7 +112,7 @@ private final LCursosEstudiantes Lógica;
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

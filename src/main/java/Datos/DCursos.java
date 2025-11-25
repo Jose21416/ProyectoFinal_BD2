@@ -14,6 +14,12 @@ public class DCursos {
         this.descripcion = descripcion;
     }
 
+    public DCursos(int id_curso, String nombre) {
+        this.id_curso = id_curso;
+        this.nombre = nombre;
+    }
+   
+
     public int getId_curso() {
         return id_curso;
     }
@@ -37,4 +43,11 @@ public class DCursos {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
+    
 }

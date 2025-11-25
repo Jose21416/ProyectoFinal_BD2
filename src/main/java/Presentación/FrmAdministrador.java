@@ -121,7 +121,7 @@ public class FrmAdministrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 //5435345346
     private void CursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CursosActionPerformed
-     Presentación.FrmCursos frm = new Presentación.FrmCursos();
+    Presentación.FrmCursos frm = new Presentación.FrmCursos();
     frm.setVisible(true);     
     }//GEN-LAST:event_CursosActionPerformed
 
