@@ -105,7 +105,12 @@ public class FrmAsignaturas extends javax.swing.JFrame {
 
         jTextField2.setText("jTextField2");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(51, 0, 0));
 
@@ -404,7 +409,9 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -526,7 +533,15 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     // Opcional: Mostrar el número de resultados (si aplica)
     // lblTotalRegistros.setText("Total de Registros: " + modelo.getRowCount());
     }//GEN-LAST:event_btnBuscarActionPerformed
- 
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+// 1. Crear una nueva instancia del formulario Administrador
+    FrmAdministrador frmAdmin = new FrmAdministrador();
+    
+    // 2. Hacer visible el formulario Administrador
+    frmAdmin.setVisible(true);
+    
+    }//GEN-LAST:event_formWindowClosing
     /**
      * @param args the command line arguments
      */
