@@ -82,6 +82,11 @@ public class FrmCursos extends javax.swing.JFrame {
             }
         });
         tablacursos.setToolTipText("");
+        tablacursos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablacursosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablacursos);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
@@ -327,13 +332,15 @@ public class FrmCursos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Seleccione un curso para actualizar.");
         }
     }//GEN-LAST:event_ActualizarCursosActionPerformed
-    private void tablacursosMouseClicked(java.awt.event.MouseEvent evt) {
+
+    private void tablacursosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablacursosMouseClicked
         int fila = tablacursos.getSelectedRow();
         if (fila >= 0) {
             jTextField2.setText(tablacursos.getValueAt(fila, 1).toString());
             jTextField3.setText(tablacursos.getValueAt(fila, 2).toString());
         }
-    }
+    }//GEN-LAST:event_tablacursosMouseClicked
+
 
     /**
      * @param args the command line arguments

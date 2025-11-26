@@ -116,12 +116,13 @@ public class LEvaluacion {
     public boolean existeEvaluacion(DEvaluacion e) {
         boolean existe = false;
 
-        String sql = "SELECT COUNT(*) FROM evaluacion WHERE nombre = ? AND id_asignatura = ?";
+        String sql = "SELECT COUNT(*) FROM evaluacion WHERE LOWER(nombre) = LOWER(?) AND id_asignatura = ?";
         LConexion conexion = new LConexion();
+
         try (Connection con = conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, e.getNombre());
-            ps.setInt(2, e.getId_asignatura()); // MUY IMPORTANTE 👈
+            ps.setString(1, e.getNombre().trim());
+            ps.setInt(2, e.getId_asignatura());
 
             ResultSet rs = ps.executeQuery();
 
@@ -135,7 +136,6 @@ public class LEvaluacion {
 
         return existe;
     }
-
 }
 
 
