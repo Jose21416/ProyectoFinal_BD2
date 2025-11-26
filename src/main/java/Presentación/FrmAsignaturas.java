@@ -33,6 +33,15 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         });
     }
     
+    private JFrame frmPadre; 
+    
+    // Constructor modificado para recibir el formulario padre
+    public FrmAsignaturas(JFrame padre) {
+        initComponents();
+        this.frmPadre = padre; // Guardamos la referencia
+        // ... (resto de su código de inicialización)
+    }
+    
     // --- CORRECCIÓN 1: Evento Click de la tabla (Implementación) ---
     private void tablaListadoMouseClicked(java.awt.event.MouseEvent evt) {
         // Al hacer clic, se asume que se va a editar
@@ -535,12 +544,9 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-// 1. Crear una nueva instancia del formulario Administrador
-    FrmAdministrador frmAdmin = new FrmAdministrador();
     
-    // 2. Hacer visible el formulario Administrador
-    frmAdmin.setVisible(true);
-    
+    this.frmPadre.setVisible(true);
+
     }//GEN-LAST:event_formWindowClosing
     /**
      * @param args the command line arguments
