@@ -76,7 +76,6 @@ public class LCursos {
             pst.setString(1, curso.getNombre());
             pst.setString(2, curso.getDescripcion());
             pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Curso agregado correctamente.");
             return true;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al insertar curso", e);
