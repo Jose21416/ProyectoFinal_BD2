@@ -19,12 +19,12 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     public FrmAsignaturas() {
         initComponents();
         
+        this.setLocationRelativeTo(null);
         cargarCursosCombo();
         mostrarAsignaturas();
         limpiarCampos();
         setLocationRelativeTo(null);
 
-        // --- CORRECCIÓN 1: Evento Click de la tabla simplificado ---
         tablaListado.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -35,34 +35,27 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     
     private JFrame frmPadre; 
     
-    // Constructor modificado para recibir el formulario padre
     public FrmAsignaturas(JFrame padre) {
         initComponents();
-        this.frmPadre = padre; // Guardamos la referencia
-        // ... (resto de su código de inicialización)
+        
+        this.setLocationRelativeTo(null); 
+        
+        this.frmPadre = padre; 
     }
     
-    // --- CORRECCIÓN 1: Evento Click de la tabla (Implementación) ---
     private void tablaListadoMouseClicked(java.awt.event.MouseEvent evt) {
-        // Al hacer clic, se asume que se va a editar
         btnGuardar.setText("Actualizar"); 
         
         int fila = tablaListado.getSelectedRow();
-        if (fila < 0) return; // Si no hay fila seleccionada, salir
-        
-        // Las columnas del modelo son: 0:ID Asig, 1: ID Curso, 2: Curso, 3: Asignatura, 4: Créditos
-        
-        // ID Asignatura
+        if (fila < 0) return;
+                
         txtIdAsignatura.setText(tablaListado.getValueAt(fila, 0).toString());
         
-        // Seleccionar el Curso por su NOMBRE (Columna 2)
         String nombreCursoTabla = tablaListado.getValueAt(fila, 2).toString();
         cmbCurso.setSelectedItem(nombreCursoTabla); 
         
-        // Nombre de la Asignatura
         txtNombreAsignatura.setText(tablaListado.getValueAt(fila, 3).toString());
         
-        // Créditos
         String creditosStr = tablaListado.getValueAt(fila, 4).toString();
         try {
             spinCreditos.setValue(Integer.valueOf(creditosStr));
@@ -70,7 +63,6 @@ public class FrmAsignaturas extends javax.swing.JFrame {
             spinCreditos.setValue(0);
         }
         
-        // Habilitar botones si se selecciona algo
         btnGuardar.setEnabled(true);
         btnEliminar.setEnabled(true);
     }
@@ -163,13 +155,11 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(spinCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtIdAsignatura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNombreAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtIdAsignatura, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cmbCurso, javax.swing.GroupLayout.Alignment.TRAILING, 0, 200, Short.MAX_VALUE)
+                    .addComponent(txtNombreAsignatura)
+                    .addComponent(spinCreditos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -191,7 +181,7 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(spinCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         txtIdAsignatura.getAccessibleContext().setAccessibleName("txtIdAsignatura");
@@ -248,18 +238,15 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(35, 35, 35)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(73, 73, 73)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -268,16 +255,16 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 0));
@@ -316,15 +303,13 @@ public class FrmAsignaturas extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtBuscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBuscar)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -336,7 +321,7 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -355,10 +340,10 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnEliminar)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -368,9 +353,9 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEliminar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -385,12 +370,13 @@ public class FrmAsignaturas extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 44, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -398,10 +384,10 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel1.getAccessibleContext().setAccessibleName("pnlRegistro");
@@ -412,15 +398,11 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -443,7 +425,6 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-    // --- 1. Validación Básica ---
         if (txtNombreAsignatura.getText().isEmpty() || cmbCurso.getSelectedIndex() <= 0) { // MEJORA: Validar el índice 0 (el mensaje de 'Seleccione')
             JOptionPane.showMessageDialog(this, "Debe ingresar el nombre y seleccionar un curso válido.");
             return;
@@ -451,9 +432,7 @@ public class FrmAsignaturas extends javax.swing.JFrame {
 
     DAsignatura datos = new DAsignatura();
     
-    // --- 2. Obtener Llave Foránea (FK): ID_CURSO ---
     String nombreCurso = cmbCurso.getSelectedItem().toString();
-    // NOTA: Este método (obtenerIdCursoPorNombre) debe estar implementado en tu LCursos.java
     int idCurso = logicaCursos.obtenerIdCursoPorNombre(nombreCurso);  
 
     if (idCurso == -1) {
@@ -461,11 +440,9 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         return;
     }
 
-    // --- 3. Cargar Datos ---
         datos.setId_curso(idCurso);
         datos.setNombre(txtNombreAsignatura.getText());
         
-        // MEJORA: Validar el valor del Spinner (debe ser > 0)
         int creditos = (Integer) spinCreditos.getValue();
         if (creditos <= 0) {
             JOptionPane.showMessageDialog(this, "Los créditos deben ser un valor positivo.");
@@ -475,24 +452,20 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         
         boolean gestionExitosa = false;
     
-    // --- 4. Determinar Operación (CREATE vs UPDATE) ---
     if (txtIdAsignatura.getText().isEmpty()) { 
-        // CREATE: ID vacío
         gestionExitosa = logicaAsignatura.insertar(datos);
     } else { 
-        // UPDATE: ID cargado
         datos.setId_asignatura(Integer.parseInt(txtIdAsignatura.getText()));
         gestionExitosa = logicaAsignatura.editar(datos);
     }
     
-    // --- 5. Mostrar Resultado ---
     if (gestionExitosa) {
         JOptionPane.showMessageDialog(this, "Asignatura guardada exitosamente.");
         mostrarAsignaturas();
         limpiarCampos();
     } else {
         JOptionPane.showMessageDialog(this, "Ocurrió un error al guardar o actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
-        }        // TODO add your handling code here:
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -513,7 +486,7 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         }
     } else {
         JOptionPane.showMessageDialog(rootPane, "Debe seleccionar un registro de la tabla para eliminar.");
-    }        // TODO add your handling code here:
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -521,32 +494,26 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-// 1. Crear una instancia de la lógica
     LAsignatura func = new LAsignatura();
     
-    // 2. Obtener el texto ingresado en el campo
     String texto = txtBuscar.getText();
     
-    // VALIDACIÓN BÁSICA: Si el campo está vacío, muestre todas las asignaturas.
     if (texto.isEmpty()) {
-        mostrarTodasLasAsignaturas(); // Asuma que tiene un método para cargar todas
+        mostrarTodasLasAsignaturas();
         return;
     }
     
-    // 3. Llamar al nuevo método de búsqueda
     DefaultTableModel modelo = func.buscarAsignaturas(texto);
     
-    // 4. Asignar el modelo a la tabla
     tablaListado.setModel(modelo);
-    
-    // Opcional: Mostrar el número de resultados (si aplica)
-    // lblTotalRegistros.setText("Total de Registros: " + modelo.getRowCount());
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-    
-    this.frmPadre.setVisible(true);
-
+    if (this.frmPadre != null) {
+        this.frmPadre.setVisible(true); 
+    } else {
+        System.exit(0); 
+    }
     }//GEN-LAST:event_formWindowClosing
     /**
      * @param args the command line arguments
@@ -604,16 +571,12 @@ public class FrmAsignaturas extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void cargarCursosCombo() {
-    // 1. Asegúrate de limpiar cualquier ítem anterior
     if (cmbCurso != null) {
         cmbCurso.removeAllItems();
     } else {
-        // Esto solo debería ocurrir si initComponents() no fue llamado,
-        // pero es una buena práctica de verificación.
         return; 
     }
 
-    // 2. Obtener el modelo de datos desde la lógica
         DefaultTableModel modeloCursos = logicaCursos.mostrarTodos();
 
         if (modeloCursos != null) {
@@ -627,21 +590,18 @@ public class FrmAsignaturas extends javax.swing.JFrame {
                 cmbCurso.addItem(nombreCurso);
             }
         } else {
-            // Esto se ejecutará si LCursos.mostrarTodos() devuelve null debido a un error de conexión/BD.
             cmbCurso.addItem("Error al cargar Cursos");
             cmbCurso.setEnabled(false);
         }
     }
 
     private void mostrarAsignaturas() {
-        // Se utiliza un objeto DAsignatura vacío para listar todas, o con el texto de búsqueda.
         DAsignatura dts = new DAsignatura();
         dts.setNombre(txtBuscar.getText());
         
         DefaultTableModel modelo = logicaAsignatura.mostrarTodas();
         tablaListado.setModel(modelo);
         
-        // Ocultar la columna ID Curso (columna 1)
         tablaListado.getColumnModel().getColumn(1).setPreferredWidth(0);
         tablaListado.getColumnModel().getColumn(1).setMaxWidth(0);
         tablaListado.getColumnModel().getColumn(1).setMinWidth(0);
@@ -653,17 +613,16 @@ public class FrmAsignaturas extends javax.swing.JFrame {
         if (cmbCurso.getItemCount() > 0) {
             cmbCurso.setSelectedIndex(0); 
         }
-        spinCreditos.setValue(1); // Se inicializa en 1 (o el mínimo definido)
+        spinCreditos.setValue(1);
         txtBuscar.setText(""); 
         btnGuardar.setText("Guardar");
-        txtIdAsignatura.setVisible(false); // Mantener oculto
+        txtIdAsignatura.setVisible(false);
         
-        // Deshabilitar botones al limpiar, solo se habilita al seleccionar
         btnGuardar.setEnabled(true);
         btnEliminar.setEnabled(false);
     }
 
     private void mostrarTodasLasAsignaturas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
