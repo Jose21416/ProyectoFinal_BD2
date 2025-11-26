@@ -60,7 +60,7 @@ public class FrmCursos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre", "Descricio"
+                "ID", "Nombre", "Descripción"
             }
         ) {
             Class[] types = new Class [] {

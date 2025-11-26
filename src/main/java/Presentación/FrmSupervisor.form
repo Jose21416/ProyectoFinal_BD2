@@ -27,12 +27,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Gesti&#xf3;n de cursos"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Calculo de notas"/>
+                <Property name="text" type="java.lang.String" value="Gesti&#xf3;n de notas"/>
               </Properties>
             </MenuItem>
           </SubComponents>
