@@ -150,6 +150,12 @@ public class FrmEvaluaciones extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Asignatura:");
 
+        cbxAsignaturas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxAsignaturasActionPerformed(evt);
+            }
+        });
+
         txtEvaluacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtEvaluacionActionPerformed(evt);
@@ -394,6 +400,10 @@ public class FrmEvaluaciones extends javax.swing.JFrame {
             txtpeso.setText(tblEvaluaciones.getValueAt(fila, 2).toString());
         }
     }//GEN-LAST:event_tblEvaluacionesMouseClicked
+
+    private void cbxAsignaturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxAsignaturasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxAsignaturasActionPerformed
 
     public static void main(String args[]) {
 
