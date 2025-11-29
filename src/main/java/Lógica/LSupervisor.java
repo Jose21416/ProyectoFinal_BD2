@@ -10,22 +10,25 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class LSupervisor {
-    
+
     LConexion con = new LConexion();
     Connection cn = con.getConnection();
     DUsuarios en = new DUsuarios();
     ResultSet rs;
-	
+
     //listarUsuarios en tabla
     public DefaultTableModel listarUsuarios(DUsuarios sup) {
         DefaultTableModel tabla;
-        String[] encabezado = {"ID", "Nombre", "Telefono", "Correo", "Usuario", "Contraseña", "Tipo de Usuario", "Estado"};
-        String[] registro = new String[8];
+        String[] encabezado = {"ID", "Nombre", "Telefono", "Correo", "Usuario", "Estado"};
+        String[] registro = new String[6];
 
         tabla = new DefaultTableModel(null, encabezado);
 
-        String sql = "SELECT id_usuario, nombre, telefono, correo, usuario, contrasena, tipo_usuario, estado "
-                + "FROM usuario WHERE usuario LIKE ? ORDER BY nombre";
+        String sql = "SELECT id_usuario, nombre, telefono, correo, usuario, tipo_usuario, estado "
+                + "FROM usuario "
+                + "WHERE usuario LIKE ? "
+                + "AND tipo_usuario = 'estudiante' " 
+                + "ORDER BY nombre";
         try {
             PreparedStatement ps = cn.prepareStatement(sql);
             ps.setString(1, "%" + sup.getUsuario() + "%");
@@ -37,9 +40,7 @@ public class LSupervisor {
                 registro[2] = rs.getString("telefono");
                 registro[3] = rs.getString("correo");
                 registro[4] = rs.getString("usuario");
-                registro[5] = rs.getString("contrasena");
-                registro[6] = rs.getString("tipo_usuario");
-                registro[7] = rs.getString("estado");
+                registro[5] = rs.getString("estado");
 
                 tabla.addRow(registro);
             }
@@ -63,9 +64,9 @@ public class LSupervisor {
                 return false;
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error en: " +e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error en: " + e.getMessage());
             return false;
         }
     }
-    
+
 }
