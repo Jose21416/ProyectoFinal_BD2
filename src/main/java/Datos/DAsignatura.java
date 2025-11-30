@@ -1,5 +1,5 @@
 package Datos;
-//ae
+
 public class DAsignatura {
 
     private int id_asignatura;

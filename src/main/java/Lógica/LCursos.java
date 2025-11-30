@@ -65,8 +65,6 @@ public class LCursos {
 
         return modelo;
     }
-
-    
  
     public boolean insertarCurso(DCursos curso) {
         sSQL = "INSERT INTO curso (nombre, descripcion) VALUES (?, ?)";
@@ -82,6 +80,55 @@ public class LCursos {
             JOptionPane.showMessageDialog(null, "Error al agregar curso: " + e.getMessage());
             return false;
         }
+    }
+    
+    public boolean importarCursos(List<DCursos> listaCursos) {
+        String sql = "INSERT INTO curso (nombre, descripcion) VALUES (?, ?)";
+        
+        Connection cn = null;
+        PreparedStatement pst = null;
+        boolean exito = true;
+
+        try {
+            cn = conexion.getConnection(); 
+            cn.setAutoCommit(false);
+            pst = cn.prepareStatement(sql);
+
+            for (DCursos datos : listaCursos) {
+                pst.setString(1, datos.getNombre());
+                pst.setString(2, datos.getDescripcion());
+                pst.addBatch();
+            }
+
+            pst.executeBatch();
+            cn.commit();
+            
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al insertar cursos por lote.", e);
+            JOptionPane.showMessageDialog(null, 
+                "Error al importar cursos:\n" + e.getMessage() + "\nRevise el log de Java.", 
+                "Error de BD en Lote", JOptionPane.ERROR_MESSAGE);
+            exito = false;
+            
+            if (cn != null) {
+                try {
+                    cn.rollback();
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, "Error en rollback.", ex);
+                }
+            }
+        } finally {
+            try {
+                if (pst != null) pst.close();
+                if (cn != null) {
+                    cn.setAutoCommit(true); 
+                    cn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Error al cerrar recursos en importación.", e);
+            }
+        }
+        return exito;
     }
 
     public boolean actualizarCurso(DCursos curso) {
