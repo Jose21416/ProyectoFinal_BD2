@@ -22,6 +22,31 @@ public class FrmGestionNotas extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
+    private void limpiarControlesDeNotas() {
+        limpiarTabla();
+
+        txtEvaluacion.setText("");
+        txtNota.setText("");
+
+        idEvaluacionSeleccionada = -1;
+        idAsignaturaSeleccionada = -1;
+
+        cmbAsignatura.removeAllItems();
+        cmbAsignatura.addItem("Seleccione asignatura...");
+
+        cmbAsignatura.setEnabled(false);
+        tblGestionNotas.setEnabled(false);
+        txtEvaluacion.setText("");
+        txtEvaluacion.setEnabled(false);
+        txtNota.setText("");
+        txtNota.setEnabled(false);
+        btnModificar.setEnabled(false);
+        btnLimpiar.setEnabled(false);
+
+        cmbAsignatura.removeAllItems();
+        limpiarTabla();
+    }
+    
     private void configuracionInicial() {
         modeloTabla = new DefaultTableModel(new Object[]{"ID Eval", "Evaluación", "Porcentaje", "Nota"}, 0);
         tblGestionNotas.setModel(modeloTabla);
@@ -36,13 +61,13 @@ public class FrmGestionNotas extends javax.swing.JFrame {
     }
 
     private void bloquearControles() {
-        cmbAsignatura.setEnabled(false);
-        tblGestionNotas.setEnabled(false);
-        txtEvaluacion.setEnabled(false);
-        txtNota.setEnabled(false);
-        btnModificar.setEnabled(false);
-        btnLimpiar.setEnabled(false);
+        idAlumnoSeleccionado = -1;
+        idAsignaturaSeleccionada = -1;
+        idEvaluacionSeleccionada = -1;
 
+        limpiarControlesDeNotas();
+
+        cmbAsignatura.setEnabled(false);
         cmbAsignatura.removeAllItems();
         limpiarTabla();
     }
@@ -157,6 +182,11 @@ public class FrmGestionNotas extends javax.swing.JFrame {
         });
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -312,13 +342,17 @@ public class FrmGestionNotas extends javax.swing.JFrame {
                 txtEvaluacion.setText("");
                 txtNota.setText("");
                 txtNota.setEnabled(false);
-                btnModificar.setEnabled(false);
             }
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Por favor ingrese una nota válida (número).");
         }
     }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        bloquearControles();
+        cargarComboAlumnos();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     public static void main(String args[]) {
 
